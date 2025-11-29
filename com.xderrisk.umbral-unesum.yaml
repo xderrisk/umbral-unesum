@@ -1,0 +1,19 @@
+id: com.xderrisk.umbral-unesum
+runtime: org.gnome.Platform
+runtime-version: '49'
+sdk: org.gnome.Sdk
+command: umbral.sh
+finish-args:
+  - --socket=x11
+  - --socket=wayland
+  - --socket=session-bus
+  - --device=dri
+modules:
+  - name: umbral
+    buildsystem: simple
+    build-commands:
+      - install -D umbral.sh /app/bin/umbral.sh
+      - cp -r src/* /app/bin/
+    sources:
+      - type: dir
+        path: .

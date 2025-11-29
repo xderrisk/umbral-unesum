@@ -3,5 +3,5 @@ Umbral es un proyecto hecho para la Universidad Estatal del Sur de Manabí que p
 
 ### Tecnologias usadas
 * Python (logica)
-* GTK3 (interfaz grafica)
+* GTK4 (interfaz grafica)
 * Flatpak (empaquetado)
