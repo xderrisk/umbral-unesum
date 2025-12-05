@@ -13,7 +13,8 @@ modules:
     buildsystem: simple
     build-commands:
       - install -D src/main.py /app/bin/umbral
-      - cp -r src/* /app/bin/
+      - mkdir -p /app/bin/views
+      - cp -r src/views/* /app/bin/views/
       - mkdir -p /app/assets
       - cp -r assets/* /app/assets/
     sources:
