@@ -37,7 +37,7 @@ class Umbral(Adw.Application):
 
     def apply_css(self):
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        css_path = os.path.join(base_dir, os.pardir, "assets", "style.css")            
+        css_path = os.path.normpath(os.path.join(base_dir, os.pardir, "assets", "style.css"))      
         css = Gtk.CssProvider()
         css.load_from_path(css_path)
         Gtk.StyleContext.add_provider_for_display(

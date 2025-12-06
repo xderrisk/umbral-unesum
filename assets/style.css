@@ -1,3 +1,7 @@
+.rounded-image {
+    border-radius: 100px;
+}
+
 .cuadro {
     background-color: #4c4c4c;
     border-radius: 20px;
