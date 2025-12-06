@@ -7,10 +7,15 @@ Umbral es un proyecto hecho para la Universidad Estatal del Sur de Manabí que p
 * Flatpak (empaquetado)
 
 ### Comandos utiles
-Empaquetar y ejecutar con flatpak
+Instalar Gnome SDK
+```
+flatpak install flathub org.gnome.Sdk 49
+```
+Instalar como flatpak
 ```
 flatpak-builder --user --install --force-clean build com.xderrisk.umbral-unesum.yaml
 ```
+Ejecutar
 ```
 flatpak run com.xderrisk.umbral-unesum
 ```
