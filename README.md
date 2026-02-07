@@ -1,0 +1,2 @@
+## Umbral: Monitorizador de Estado de Aulas
+Umbral es una solución tecnológica desarrollada para la Universidad Estatal del Sur de Manabí (UNESUM). Su objetivo es optimizar la gestión de espacios físicos en la carrera de Tecnologías de la Información, permitiendo visualizar en tiempo real si un aula está ocupada o disponible mediante el uso de sensores.
