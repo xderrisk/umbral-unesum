@@ -48,9 +48,7 @@ fn build_ui(app: &Application) {
         .css_classes(vec!["heading".to_string()])
         .build();
 
-    left_container.append(&tittle_left);
-
-    //Estado de Aulas
+    // Estado de Aulas
     let right_container = Box::builder()
         .orientation(Orientation::Vertical)
         .spacing(10)
@@ -62,18 +60,16 @@ fn build_ui(app: &Application) {
         .label("Estado de Aulas")
         .css_classes(vec!["heading".to_string()])
         .build();
+
+    left_container.append(&tittle_left);
     right_container.append(&tittle_right);
 
     main_box.append(&left_container);
-    
-    // Separador visual
     let separator = gtk::Separator::new(Orientation::Vertical);
     main_box.append(&separator);
-    
     main_box.append(&right_container);
 
     toolbar_view.set_content(Some(&main_box));
     window.set_content(Some(&toolbar_view));
-
     window.present();
 }
