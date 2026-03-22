@@ -1,6 +1,9 @@
+mod classrooms;
+mod news;
+
 use adw::prelude::*;
 use adw::{Application, ApplicationWindow, HeaderBar, ToolbarView};
-use gtk::{Align, Box, Label, Orientation, Button};
+use gtk::{Box, Button, Orientation};
 
 fn main() {
     let app = Application::builder()
@@ -36,33 +39,9 @@ fn build_ui(app: &Application) {
         .build();
 
     // Noticias UNESUM
-    let left_container = Box::builder()
-        .orientation(Orientation::Vertical)
-        .spacing(10)
-        .hexpand(true)
-        .valign(Align::Start)
-        .build();
-
-    let tittle_left = Label::builder()
-        .label("Noticias")
-        .css_classes(vec!["heading".to_string()])
-        .build();
-
+    let left_container = news::news_section();
     // Estado de Aulas
-    let right_container = Box::builder()
-        .orientation(Orientation::Vertical)
-        .spacing(10)
-        .hexpand(true)
-        .valign(Align::Start)
-        .build();
-
-    let tittle_right = Label::builder()
-        .label("Estado de Aulas")
-        .css_classes(vec!["heading".to_string()])
-        .build();
-
-    left_container.append(&tittle_left);
-    right_container.append(&tittle_right);
+    let right_container = classrooms::classroms_section();
 
     main_box.append(&left_container);
     let separator = gtk::Separator::new(Orientation::Vertical);
