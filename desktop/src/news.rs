@@ -1,19 +1,31 @@
 use adw::prelude::*;
-use gtk::{Align, Box, Label, Orientation};
+use gtk::{Align, Box, Label, Orientation, Picture};
 
 pub fn news_section() -> Box {
     let container = Box::builder()
         .orientation(Orientation::Vertical)
-        .spacing(10)
         .hexpand(true)
-        .valign(Align::Start)
         .build();
 
     let tittle = Label::builder()
         .label("Noticias")
         .css_classes(vec!["heading".to_string()])
         .build();
-
     container.append(&tittle);
+
+    let picture = Picture::builder().build();
+    picture.set_filename(Some("assets/prueba1.png"));
+    picture.set_margin_top(20);
+    picture.set_margin_bottom(20);
+    picture.set_margin_start(20);
+    picture.set_margin_end(20);
+    picture.add_css_class("news-image");
+    let picture_container = Box::builder()
+        .orientation(Orientation::Vertical)
+        .vexpand(true)
+        .valign(Align::Center)
+        .build();
+    picture_container.append(&picture);
+    container.append(&picture_container);
     container
 }

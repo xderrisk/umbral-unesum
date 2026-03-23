@@ -10,6 +10,7 @@ pub fn classroms_section() -> Box {
     let title = Label::builder()
         .label("Estado de Aulas")
         .css_classes(vec!["heading".to_string()])
+        .margin_bottom(20)
         .build();
     container.append(&title);
 
@@ -20,10 +21,9 @@ pub fn classroms_section() -> Box {
 
         let card = Box::builder()
             .orientation(Orientation::Vertical)
-            .margin_start(10)
-            .margin_end(10)
-            .margin_top(5)
-            .margin_bottom(8)
+            .margin_start(20)
+            .margin_end(20)
+            .margin_bottom(20)
             .build();
         card.add_css_class("aula-cuadro");
 
