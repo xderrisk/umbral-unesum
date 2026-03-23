@@ -18,7 +18,7 @@ fn build_ui(app: &Application) {
     let display = gdk::Display::default().expect("No se pudo conectar al display");
     let provider = gtk::CssProvider::new();
     let priority = gtk::STYLE_PROVIDER_PRIORITY_APPLICATION;
-    provider.load_from_path("assets/style.css");
+    provider.load_from_data(include_str!("../assets/style.css"));
     gtk::style_context_add_provider_for_display(&display, &provider, priority);
 
     let window = ApplicationWindow::builder()
