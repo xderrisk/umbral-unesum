@@ -1,0 +1,26 @@
+.rounded-image {
+    border-radius: 100px;
+}
+
+.aula-cuadro {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--card-border-color);
+    border-radius: 20px;
+    min-width: 300px;
+    min-height: 250px;
+}
+
+.aula-nombre {
+    font-size: 24pt;
+    font-weight: bold;
+}
+
+.aula-activa {
+    background-color: #26a269;
+    border: 2px solid #33d17a;
+}
+
+.aula-inactiva {
+    background-color: #c01c28;
+    border: 2px solid #f66151;
+}

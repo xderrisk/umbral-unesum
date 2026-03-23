@@ -1,19 +1,26 @@
 mod classrooms;
+mod config;
 mod news;
 
 use adw::prelude::*;
 use adw::{Application, ApplicationWindow, HeaderBar, ToolbarView};
-use gtk::{Box, Button, Orientation};
+use gtk::{Box, Button, Orientation, gdk};
 
 fn main() {
     let app = Application::builder()
-        .application_id("ec.edu.unesum.umbral")
+        .application_id("edu.unesum.umbral")
         .build();
     app.connect_activate(build_ui);
     app.run();
 }
 
 fn build_ui(app: &Application) {
+    let display = gdk::Display::default().expect("No se pudo conectar al display");
+    let provider = gtk::CssProvider::new();
+    let priority = gtk::STYLE_PROVIDER_PRIORITY_APPLICATION;
+    provider.load_from_path("assets/style.css");
+    gtk::style_context_add_provider_for_display(&display, &provider, priority);
+
     let window = ApplicationWindow::builder()
         .application(app)
         .title("Umbral - UNESUM")
@@ -42,6 +49,7 @@ fn build_ui(app: &Application) {
     let left_container = news::news_section();
     // Estado de Aulas
     let right_container = classrooms::classroms_section();
+    right_container.set_hexpand(false);
 
     main_box.append(&left_container);
     let separator = gtk::Separator::new(Orientation::Vertical);
