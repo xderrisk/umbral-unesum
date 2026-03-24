@@ -1,3 +1,4 @@
+use crate::config;
 use adw::prelude::*;
 use gtk::{Align, Box, Label, Orientation, Picture};
 
@@ -14,7 +15,8 @@ pub fn news_section() -> Box {
     container.append(&tittle);
 
     let picture = Picture::builder().build();
-    picture.set_filename(Some("assets/prueba1.png"));
+    let img = config::news_folder();
+    picture.set_filename(Some(img));
     picture.set_margin_top(20);
     picture.set_margin_bottom(20);
     picture.set_margin_start(20);

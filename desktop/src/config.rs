@@ -15,6 +15,20 @@ pub fn get_devices_path() -> PathBuf {
     config_dir.join("devices.json")
 }
 
+pub fn get_app_data_path() -> PathBuf {
+    let proj_dirs = ProjectDirs::from("edu", "unesum", "umbral")
+        .expect("No se pudo obtener el directorio de proyecto");
+    let local_dir = proj_dirs.data_local_dir().to_path_buf();
+    if !local_dir.exists() {
+        fs::create_dir_all(&local_dir).expect("Error al crear carpeta de configuración");
+    }
+    proj_dirs.data_local_dir().to_path_buf()
+}
+
+pub fn news_folder() -> PathBuf {
+    let ruta = get_app_data_path();
+    ruta.join("news/prueba1.png")
+}
 pub fn load_aulas() -> Vec<Value> {
     let ruta = get_devices_path();
 
