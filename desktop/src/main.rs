@@ -1,9 +1,8 @@
 mod classrooms;
 mod config;
 mod news;
-
 use adw::prelude::*;
-use adw::{Application, ApplicationWindow, HeaderBar, ToolbarView};
+use adw::{AboutDialog, Application, ApplicationWindow, HeaderBar, ToolbarView};
 use gtk::{Box, Button, Orientation, gdk};
 
 fn main() {
@@ -31,13 +30,24 @@ fn build_ui(app: &Application) {
         .tooltip_text("Agregar Aula")
         .build();
 
+    let btn_about = Button::builder()
+        .icon_name("help-about-symbolic")
+        .tooltip_text("Sobre nosotros")
+        .build();
+
     btn_add.connect_clicked(|_| {
         println!("boton presionado");
     });
 
+    let window_clone = window.clone();
+    btn_about.connect_clicked(move |_| {
+        show_about_dialog(&window_clone);
+    });
+
     let toolbar_view = ToolbarView::new();
     let header_bar = HeaderBar::new();
-    header_bar.pack_end(&btn_add);
+    header_bar.pack_start(&btn_add);
+    header_bar.pack_end(&btn_about);
     toolbar_view.add_top_bar(&header_bar);
 
     let main_box = Box::builder()
@@ -59,4 +69,18 @@ fn build_ui(app: &Application) {
     toolbar_view.set_content(Some(&main_box));
     window.set_content(Some(&toolbar_view));
     window.present();
+}
+
+fn show_about_dialog(parent: &ApplicationWindow) {
+    let about = AboutDialog::builder()
+        .application_name("Umbral")
+        .application_icon("edu.unesum.umbral")
+        .developer_name("Sergio Galarza")
+        .developers(vec![
+            "Sergio Galarza - Desarrollador principal",
+            "Oscar Plua - Patrocinador",
+            "Mafer Lucas - Diseño UI/UX"
+        ])
+        .build();
+    about.present(Some(parent));
 }
