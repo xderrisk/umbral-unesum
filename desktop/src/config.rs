@@ -27,8 +27,26 @@ pub fn get_app_data_path() -> PathBuf {
 
 pub fn news_folder() -> PathBuf {
     let ruta = get_app_data_path();
-    ruta.join("news/prueba1.png")
+    ruta.join("news")
 }
+
+pub fn list_news_images() -> Vec<PathBuf> {
+    let dir = news_folder();
+    fs::read_dir(dir)
+        .ok()
+        .map(|entries| {
+            entries
+                .filter_map(|entry| entry.ok())
+                .map(|entry| entry.path())
+                .filter(|path| {
+                    let ext = path.extension().and_then(|e| e.to_str()).unwrap_or("");
+                    matches!(ext.to_lowercase().as_str(), "png" | "jpg" | "jpeg" | "gif")
+                })
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
 pub fn load_aulas() -> Vec<Value> {
     let ruta = get_devices_path();
 
