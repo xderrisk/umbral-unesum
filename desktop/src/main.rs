@@ -1,11 +1,25 @@
 mod classrooms;
-mod config;
+mod settings;
 mod news;
 use adw::prelude::*;
 use adw::{AboutDialog, Application, ApplicationWindow, HeaderBar, ToolbarView};
 use gtk::{Box, Button, Orientation, gdk};
+use rumqttd::{Broker, Config};
+use std::thread;
 
 fn main() {
+    let config = config::Config::builder()
+        .add_source(config::File::from_str(
+            include_str!("../rumqttd.toml"),
+            config::FileFormat::Toml,
+        ))
+        .build()
+        .unwrap();
+    let rumqttd_config: Config = config.try_deserialize().unwrap();
+    let mut broker = Broker::new(rumqttd_config);
+    thread::spawn(move || {
+        broker.start().unwrap();
+    });
     let app = Application::builder()
         .application_id("edu.unesum.umbral")
         .build();
@@ -79,7 +93,7 @@ fn show_about_dialog(parent: &ApplicationWindow) {
         .developers(vec![
             "Sergio Galarza - Desarrollador principal",
             "Oscar Plua - Patrocinador",
-            "Mafer Lucas - Diseño UI/UX"
+            "Mafer Lucas - Diseño UI/UX",
         ])
         .build();
     about.present(Some(parent));
