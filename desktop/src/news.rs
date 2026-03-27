@@ -1,4 +1,4 @@
-use crate::config;
+use crate::settings;
 use gtk::glib;
 use adw::prelude::*;
 use std::cell::RefCell;
@@ -16,7 +16,7 @@ pub fn news_section() -> Box {
         .build();
     container.append(&tittle);
 
-    let images = config::list_news_images();
+    let images = settings::list_news_images();
     if images.is_empty() {
         let placeholder = Label::builder()
             .label("No hay imágenes de noticias disponibles")

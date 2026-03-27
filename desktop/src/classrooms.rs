@@ -1,4 +1,4 @@
-use crate::config;
+use crate::settings;
 use adw::prelude::*;
 use gtk::{Align, Box, Label, Orientation};
 
@@ -14,7 +14,7 @@ pub fn classroms_section() -> Box {
         .build();
     container.append(&title);
 
-    let aulas = config::load_aulas();
+    let aulas = settings::load_aulas();
     for aula in aulas {
         let nombre = aula["nombre"].as_str().unwrap_or("Aula");
         let estado = aula["estado"].as_str().unwrap_or("Desconectado");
