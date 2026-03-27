@@ -1,2 +1,2 @@
 dev:
-	cargo run --manifest-path desktop/Cargo.toml
+	cd desktop && cargo run
