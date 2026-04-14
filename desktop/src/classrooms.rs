@@ -15,9 +15,11 @@ pub fn classroms_section() -> Box {
     if !aulas.is_empty() {
         for aula in aulas {
             let nombre = aula["nombre"].as_str().unwrap_or("Aula");
+            let mac = aula["mac"].as_str().unwrap_or("");
             let estado = aula["estado"].as_str().unwrap_or("Desconectado");
 
             let card = Box::builder()
+                .name(mac)
                 .orientation(Orientation::Vertical)
                 .margin_start(20)
                 .margin_end(20)
@@ -35,6 +37,7 @@ pub fn classroms_section() -> Box {
             label.add_css_class("aula-nombre");
 
             let status_label = Label::builder()
+                .name("status-label")
                 .label(estado)
                 .css_classes(vec!["dim-label".to_string()])
                 .build();
