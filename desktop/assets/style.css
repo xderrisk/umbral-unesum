@@ -11,14 +11,12 @@
     font-weight: bold;
 }
 
-.aula-activa {
-    background-color: #26a269;
-    border: 2px solid #33d17a;
+.aula-libre {
+    background-color: var(--success-bg-color);
 }
 
-.aula-inactiva {
-    background-color: #c01c28;
-    border: 2px solid #f66151;
+.aula-ocupada {
+    background-color: var(--destructive-bg-color);
 }
 
 .news-image {
