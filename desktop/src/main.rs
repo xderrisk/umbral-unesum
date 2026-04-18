@@ -7,7 +7,6 @@ use adw::{AboutDialog, Application, ApplicationWindow, HeaderBar, ToolbarView};
 use gtk::{Box, Button, Orientation, gdk};
 
 fn main() {
-    mqtt::init();
     let app = Application::builder()
         .application_id("edu.unesum.umbral")
         .build();
