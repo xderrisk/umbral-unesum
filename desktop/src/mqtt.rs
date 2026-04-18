@@ -1,10 +1,16 @@
+use async_channel;
 use rumqttd::{Broker, Config, Notification};
 use serde_json::Value;
 use std::thread;
 
+pub struct AulaUpdate {
+    pub mac: String,
+    pub estado: String,
+}
+
 // https://rumqtt.bytebeam.io/docs/rumqttd/Guides/Using%20Link%20to%20communicate%20with%20broker/
 
-pub fn init() {
+pub fn init(sender: async_channel::Sender<AulaUpdate>) {
     let config = config::Config::builder()
         .add_source(config::File::from_str(
             include_str!("../rumqttd.toml"),
@@ -29,10 +35,10 @@ pub fn init() {
                     if let Notification::Forward(forward) = notification {
                         if let Ok(json) = serde_json::from_slice::<Value>(&forward.publish.payload)
                         {
-                            let mac = json["mac"].as_str().unwrap_or("Desconocida");
-                            let estado = json["estado"].as_str().unwrap_or("0");
-                            let txt = if estado == "1" { "OCUPADO" } else { "LIBRE" };
-                            println!("MAC: {} | Estado: {}", mac, txt);
+                            let mac = json["mac"].as_str().unwrap_or("Desconocida").to_string();
+                            let estado = json["estado"].as_str().unwrap_or("0").to_string();
+                            let update = AulaUpdate { mac, estado };
+                            let _ = sender.send_blocking(update);
                         } else {
                             println!("Error: El payload no es un JSON válido.");
                         }
