@@ -1,3 +1,2 @@
 /desktop/target
-/mosquitto/data
-/desktop/assets/*png
+/espcam/secret.h
