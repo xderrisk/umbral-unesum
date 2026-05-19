@@ -13,7 +13,7 @@ pub struct AulaUpdate {
 pub fn init(sender: async_channel::Sender<AulaUpdate>) {
     let config = config::Config::builder()
         .add_source(config::File::from_str(
-            include_str!("../rumqttd.toml"),
+            include_str!("../Rumqttd.toml"),
             config::FileFormat::Toml,
         ))
         .build()
