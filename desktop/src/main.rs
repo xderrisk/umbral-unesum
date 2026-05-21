@@ -3,8 +3,8 @@ mod mqtt;
 mod news;
 mod settings;
 use adw::prelude::*;
-use adw::{AboutDialog, Application, ApplicationWindow, HeaderBar, ToolbarView};
-use gtk::{Box, Button, Orientation, gdk};
+use adw::{AboutDialog, Application, ApplicationWindow, HeaderBar, PreferencesDialog, ToolbarView};
+use gtk::{Box, Button, Orientation, gdk, glib};
 
 fn main() {
     let app = Application::builder()
@@ -31,24 +31,45 @@ fn build_ui(app: &Application) {
         .tooltip_text("Agregar Aula")
         .build();
 
+    let btn_config = Button::builder()
+        .icon_name("settings-symbolic")
+        .tooltip_text("Configuracón")
+        .build();
+
     let btn_about = Button::builder()
         .icon_name("help-about-symbolic")
         .tooltip_text("Sobre nosotros")
         .build();
 
-    btn_add.connect_clicked(|_| {
-        println!("boton presionado");
-    });
+    btn_add.connect_clicked(glib::clone!(
+        #[weak]
+        window,
+        move |_| {
+            show_add_dialog(&window);
+        }
+    ));
 
-    let window_clone = window.clone();
-    btn_about.connect_clicked(move |_| {
-        show_about_dialog(&window_clone);
-    });
+    btn_config.connect_clicked(glib::clone!(
+        #[weak]
+        window,
+        move |_| {
+            show_config_dialog(&window);
+        }
+    ));
+
+    btn_about.connect_clicked(glib::clone!(
+        #[weak]
+        window,
+        move |_| {
+            show_about_dialog(&window);
+        }
+    ));
 
     let toolbar_view = ToolbarView::new();
     let header_bar = HeaderBar::new();
     header_bar.pack_start(&btn_add);
     header_bar.pack_end(&btn_about);
+    header_bar.pack_end(&btn_config);
     toolbar_view.add_top_bar(&header_bar);
 
     let main_box = Box::builder()
@@ -80,8 +101,18 @@ fn show_about_dialog(parent: &ApplicationWindow) {
         .developers(vec![
             "Sergio Galarza - Desarrollador principal",
             "Oscar Plua - Patrocinador",
-            "Mafer Lucas - Diseño UI/UX",
+            "Mafer Lucas - Patrocinadora",
         ])
         .build();
     about.present(Some(parent));
+}
+fn show_add_dialog(parent: &ApplicationWindow) {
+    let dialog = PreferencesDialog::builder()
+        .title("Añadir Dispositivo")
+        .build();
+    dialog.present(Some(parent));
+}
+fn show_config_dialog(parent: &ApplicationWindow) {
+    let dialog = PreferencesDialog::builder().title("Configuración").build();
+    dialog.present(Some(parent));
 }
