@@ -5,7 +5,7 @@ mod settings;
 use adw::prelude::*;
 use adw::{
     AboutDialog, Application, ApplicationWindow, EntryRow, HeaderBar, PreferencesDialog,
-    PreferencesGroup, PreferencesPage, ToolbarView,
+    PreferencesGroup, PreferencesPage, Toast, ToolbarView,
 };
 use gtk::{Box, Button, Orientation, gdk, glib};
 
@@ -133,12 +133,20 @@ fn show_add_dialog(parent: &ApplicationWindow) {
         name,
         #[weak]
         mac,
+        #[weak]
+        dialog,
         move |_| {
             let name = name.text().to_string();
             let mac = mac.text().to_string();
             if name.is_empty() || mac.is_empty() {
+                let toast = Toast::new("Por favor rellena todos los campos");
+                toast.set_timeout(1);
+                dialog.add_toast(toast);
                 return;
             }
+            let toast = Toast::new("Dispositivo agregado exitosamente");
+            toast.set_timeout(1);
+            dialog.add_toast(toast);
         }
     ));
     dialog.present(Some(parent));
