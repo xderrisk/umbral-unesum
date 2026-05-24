@@ -114,19 +114,18 @@ fn show_add_dialog(parent: &ApplicationWindow) {
         .title("Añadir Dispositivo")
         .build();
     let page = PreferencesPage::builder().build();
-    let group = PreferencesGroup::builder()
-        .title("Datos del ESP32CAM")
-        .build();
-    let name = EntryRow::builder().title("Nombre").build();
-    let mac = EntryRow::builder().title("MAC").build();
     let add = Button::builder()
         .label("Agregar")
         .css_classes(["suggested-action"])
-        .margin_top(12)
         .build();
+    let group = PreferencesGroup::builder()
+        .title("Datos del ESP32CAM")
+        .header_suffix(&add)
+        .build();
+    let name = EntryRow::builder().title("Nombre").build();
+    let mac = EntryRow::builder().title("MAC").build();
     group.add(&name);
     group.add(&mac);
-    group.add(&add);
     page.add(&group);
     dialog.add(&page);
     add.connect_clicked(glib::clone!(
