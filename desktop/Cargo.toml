@@ -11,3 +11,6 @@ config = "0.15.22"
 serde_json = "1.0"
 rumqttd = "0.20.0"
 async-channel = "2.3"
+
+[build-dependencies]
+glib-build-tools = "0.22.0"
