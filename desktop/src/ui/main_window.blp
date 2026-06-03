@@ -1,0 +1,46 @@
+using Gtk 4.0;
+using Adw 1;
+
+Adw.ApplicationWindow window {
+  title: "Umbral - UNESUM";
+
+  content: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {
+      [start]
+      Button btn_add {
+        icon-name: "list-add-symbolic";
+        tooltip-text: _("Add classroom");
+      }
+
+      [end]
+      Button btn_about {
+        icon-name: "help-about-symbolic";
+        tooltip-text: _("About us");
+      }
+
+      [end]
+      Button btn_config {
+        icon-name: "settings-symbolic";
+        tooltip-text: _("Settings");
+      }
+    }
+
+    content: Box {
+      orientation: horizontal;
+      spacing: 0;
+
+      Box left_container {
+        hexpand: true;
+      }
+
+      Separator {
+        orientation: vertical;
+      }
+
+      Box right_container {
+        hexpand: false;
+      }
+    };
+  };
+}

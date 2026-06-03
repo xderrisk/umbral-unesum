@@ -1,0 +1,30 @@
+using Gtk 4.0;
+using Adw 1;
+
+Adw.PreferencesDialog add_dialog {
+  title: _("Add devices");
+
+  Adw.PreferencesPage {
+    Adw.PreferencesGroup {
+      title: _("ESP32CAM data");
+      margin-bottom: 40;
+
+      [header-suffix]
+      Button btn_dialog_add {
+        label: _("Add");
+
+        styles [
+          "suggested-action",
+        ]
+      }
+
+      Adw.EntryRow entry_name {
+        title: _("Name");
+      }
+
+      Adw.EntryRow entry_mac {
+        title: _("MAC Address");
+      }
+    }
+  }
+}

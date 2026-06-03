@@ -5,7 +5,7 @@ use gtk::glib;
 use gtk::{Align, Box, Label, Orientation};
 use std::collections::HashMap;
 
-pub fn classroms_section() -> Box {
+pub fn classrooms_section() -> Box {
     let container = Box::builder().orientation(Orientation::Vertical).build();
     let mut labels_map: HashMap<String, (Label, Box)> = HashMap::new();
     let (sender, receiver) = async_channel::unbounded::<crate::mqtt::AulaUpdate>();
