@@ -12,3 +12,8 @@ upload: compile
 monitor:
 	arduino-cli monitor -p /dev/ttyUSB0 -c baudrate=115200
 flash: upload monitor
+package: rasp
+	mkdir -p desktop/dist
+	tar -czf desktop/dist/umbral-arm64.tar.gz \
+		-C $$(pwd)/desktop/target/aarch64-unknown-linux-gnu/release umbral \
+		-C $$(pwd)/desktop locale

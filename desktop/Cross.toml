@@ -2,7 +2,7 @@
 image = "debian:trixie"
 pre-build = [
     "dpkg --add-architecture arm64",
-    "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends build-essential gcc-aarch64-linux-gnu blueprint-compiler libadwaita-1-dev libadwaita-1-dev:arm64"
+    "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends build-essential gcc-aarch64-linux-gnu blueprint-compiler gettext libadwaita-1-dev libadwaita-1-dev:arm64"
 ]
 
 [target.aarch64-unknown-linux-gnu.env]

@@ -1,0 +1,50 @@
+msgid "No news images available"
+msgstr ""
+
+msgid "Failed to load images"
+msgstr ""
+
+msgid "Occupied"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "I'll add congurations here"
+msgstr ""
+
+msgid "Real-time classroom monitoring system."
+msgstr ""
+
+msgid "Add devices"
+msgstr ""
+
+msgid "ESP32CAM data"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "MAC Address"
+msgstr ""
+
+msgid "Classroom Status"
+msgstr ""
+
+msgid "Add Classrooms"
+msgstr ""
+
+msgid "News"
+msgstr ""
+
+msgid "Add classroom"
+msgstr ""
+
+msgid "About us"
+msgstr ""

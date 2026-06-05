@@ -1,0 +1,63 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Sergio Galarza <sergiowgp@outlook.com>\n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.9\n"
+
+msgid "No news images available"
+msgstr "No hay imágenes de noticias disponibles"
+
+msgid "Failed to load images"
+msgstr "No se pudieron cargar las imágenes"
+
+msgid "Occupied"
+msgstr "Ocupado"
+
+msgid "Available"
+msgstr "Libre"
+
+msgid "Settings"
+msgstr "Ajustes"
+
+msgid "I'll add congurations here"
+msgstr "Agregaré configuraciones aquí"
+
+msgid "Real-time classroom monitoring system."
+msgstr "Sistema de monitorización de aulas en tiempo real."
+
+msgid "Add devices"
+msgstr "Agregar dispositivos"
+
+msgid "ESP32CAM data"
+msgstr "Datos de ESP32CAM"
+
+msgid "Add"
+msgstr "Agregar"
+
+msgid "Name"
+msgstr "Nombre"
+
+msgid "MAC Address"
+msgstr "Dirección MAC"
+
+msgid "Classroom Status"
+msgstr "Estado del aula"
+
+msgid "Add Classrooms"
+msgstr "Agregar aulas"
+
+msgid "News"
+msgstr "Noticias"
+
+msgid "Add classroom"
+msgstr "Agregar aula"
+
+msgid "About us"
+msgstr "Sobre nosotros"
