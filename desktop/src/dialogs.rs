@@ -1,5 +1,7 @@
+use crate::settings::save_device;
 use adw::prelude::*;
 use adw::{AboutDialog, ApplicationWindow, EntryRow, PreferencesDialog, Toast};
+use gettextrs::gettext;
 use gtk::{Builder, Button, glib};
 
 pub fn show_add(parent: &ApplicationWindow) {
@@ -7,6 +9,87 @@ pub fn show_add(parent: &ApplicationWindow) {
     let dialog: PreferencesDialog = builder.object("add_dialog").unwrap();
     let name: EntryRow = builder.object("entry_name").unwrap();
     let mac: EntryRow = builder.object("entry_mac").unwrap();
+    let btn_dialog_add: Button = builder.object("btn_dialog_add").unwrap();
+
+    let validate_form = glib::clone!(
+        #[weak]
+        name,
+        #[weak]
+        mac,
+        #[weak]
+        btn_dialog_add,
+        move || {
+            let is_name_ready = !name.text().to_string().trim().is_empty();
+            let is_mac_ready = mac.text().to_string().len() == 17;
+            btn_dialog_add.set_sensitive(is_name_ready && is_mac_ready);
+        }
+    );
+
+    name.connect_changed(glib::clone!(
+        #[strong]
+        validate_form,
+        move |_| {
+            validate_form();
+        }
+    ));
+
+    mac.connect_changed(glib::clone!(
+        #[weak]
+        mac,
+        #[strong]
+        validate_form,
+        move |_| {
+            let original_text = mac.text().to_string();
+            let g_editable = mac.upcast_ref::<gtk::Editable>();
+            let original_position = g_editable.position();
+            let mut clean_text = String::with_capacity(12);
+            for c in original_text.chars().filter(|c| c.is_ascii_hexdigit()) {
+                if clean_text.len() == 12 {
+                    break;
+                }
+                clean_text.push(c.to_ascii_uppercase());
+            }
+
+            let mut formatted_text = String::with_capacity(17);
+            for (i, ch) in clean_text.chars().enumerate() {
+                if i > 0 && i % 2 == 0 {
+                    formatted_text.push(':');
+                }
+                formatted_text.push(ch);
+            }
+
+            if original_text != formatted_text {
+                mac.set_text(&formatted_text);
+
+                let mut chars_before: usize = 0;
+                for (i, ch) in original_text.chars().enumerate() {
+                    if (i as i32) >= original_position {
+                        break;
+                    }
+                    if ch.is_ascii_hexdigit() {
+                        chars_before += 1;
+                    }
+                }
+
+                let mut new_position = chars_before + (chars_before.saturating_sub(1) / 2);
+                let formatted_len = formatted_text.chars().count();
+
+                if new_position > 0 && new_position % 3 == 2 && new_position == formatted_len - 1 {
+                    new_position += 1;
+                }
+
+                if new_position > 0 && original_text.len() > formatted_text.len() {
+                    if formatted_text.chars().nth(new_position - 1) == Some(':') {
+                        new_position -= 1;
+                    }
+                }
+
+                g_editable.set_position(new_position as i32);
+            }
+
+            validate_form();
+        }
+    ));
 
     builder
         .object::<Button>("btn_dialog_add")
@@ -19,13 +102,23 @@ pub fn show_add(parent: &ApplicationWindow) {
             #[weak]
             dialog,
             move |_| {
-                let is_empty = name.text().is_empty() || mac.text().is_empty();
-                let msg = if is_empty {
-                    "Please fill in all fields"
-                } else {
-                    "Device added successfully"
-                };
-                dialog.add_toast(Toast::builder().title(msg).timeout(2).build());
+                let name_text = name.text().to_string().trim().to_string();
+                let mac_text = mac.text().to_string().trim().to_string();
+                if name_text.is_empty() || mac_text.is_empty() {
+                    dialog.add_toast(builder.object::<Toast>("empty_field").unwrap());
+                    return;
+                }
+                match save_device(&name_text, &mac_text) {
+                    Ok(()) => {
+                        dialog.add_toast(builder.object::<Toast>("saved_device").unwrap());
+                        return;
+                    }
+                    Err(err) => {
+                        let msg = format!("{}: {}", gettext("Error saving"), err);
+                        dialog.add_toast(Toast::builder().title(&msg).timeout(2).build());
+                        return;
+                    }
+                }
             }
         ));
     dialog.present(Some(parent));

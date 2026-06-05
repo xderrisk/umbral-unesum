@@ -60,3 +60,17 @@ pub fn load_aulas() -> Vec<Value> {
 
     v.as_array().cloned().unwrap_or_default()
 }
+
+pub fn save_device(name: &str, mac: &str) -> Result<(), String> {
+    let ruta = get_devices_path();
+    let mut dispositivos = load_aulas();
+    let nuevo_dispositivo = serde_json::json!({
+        "name": name,
+        "mac": mac,
+    });
+    dispositivos.push(nuevo_dispositivo);
+    let json_string = serde_json::to_string_pretty(&dispositivos)
+        .map_err(|e| format!("Error al serializar JSON: {}", e))?;
+    fs::write(ruta, json_string).map_err(|e| format!("Error al escribir el archivo: {}", e))?;
+    Ok(())
+}

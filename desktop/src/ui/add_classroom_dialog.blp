@@ -12,6 +12,7 @@ Adw.PreferencesDialog add_dialog {
       [header-suffix]
       Button btn_dialog_add {
         label: _("Add");
+        sensitive: false;
 
         styles [
           "suggested-action",
@@ -24,6 +25,21 @@ Adw.PreferencesDialog add_dialog {
 
       Adw.EntryRow entry_mac {
         title: _("MAC Address");
+      }
+
+      Adw.Toast empty_field {
+        title: _("Please fill in all fields");
+        timeout: 2;
+      }
+
+      Adw.Toast saved_device {
+        title: _("Classroom added successfully");
+        timeout: 2;
+      }
+
+      Adw.Toast save_error {
+        title: _("Error saving");
+        timeout: 2;
       }
     }
   }
