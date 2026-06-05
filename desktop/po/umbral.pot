@@ -1,3 +1,9 @@
+msgid "Classroom added successfully"
+msgstr ""
+
+msgid "Error saving"
+msgstr ""
+
 msgid "No news images available"
 msgstr ""
 

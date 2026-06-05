@@ -1,7 +1,5 @@
 use std::{fs, path::Path, process::Command};
 
-const RE_RUN_DIRS: &[&str] = &["src", "po"];
-
 fn compile_blueprint(input: &Path, output: &Path) {
     let status = Command::new("blueprint-compiler")
         .args([
@@ -57,6 +55,30 @@ fn generate_pot_file(ui_out: &Path) {
     let _ = cmd.status();
 }
 
+fn update_po_files() {
+    let pot_path = Path::new("po/umbral.pot");
+    if !pot_path.exists() {
+        return;
+    }
+
+    if let Ok(entries) = fs::read_dir("po") {
+        for entry in entries.flatten() {
+            let path = entry.path();
+            if path.is_file() && path.extension().and_then(|e| e.to_str()) == Some("po") {
+                let _ = Command::new("msgmerge")
+                    .args([
+                        "--update",
+                        "--backup=none",
+                        "--no-wrap",
+                        path.to_str().unwrap(),
+                        pot_path.to_str().unwrap(),
+                    ])
+                    .status();
+            }
+        }
+    }
+}
+
 fn compile_mo_files() {
     let po_dir = Path::new("po");
     if let Ok(entries) = fs::read_dir(po_dir) {
@@ -80,8 +102,13 @@ fn compile_mo_files() {
 }
 
 fn main() {
-    for dir in RE_RUN_DIRS {
-        println!("cargo:rerun-if-changed={}", dir);
+    println!("cargo:rerun-if-changed=src");
+    if let Ok(entries) = fs::read_dir("po") {
+        for entry in entries.flatten() {
+            if entry.path().extension().and_then(|e| e.to_str()) == Some("po") {
+                println!("cargo:rerun-if-changed={}", entry.path().to_str().unwrap());
+            }
+        }
     }
     let ui_src = Path::new("src/ui");
     let ui_out = Path::new("data/ui");
@@ -106,5 +133,6 @@ fn main() {
     fs::write(gresource_xml_path, xml_content).expect("No se pudo escribir gresource.xml");
     glib_build_tools::compile_resources(&["data"], gresource_xml_path, "resources.gresource");
     generate_pot_file(ui_out);
+    update_po_files();
     compile_mo_files();
 }

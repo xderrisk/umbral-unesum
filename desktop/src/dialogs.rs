@@ -59,8 +59,6 @@ pub fn show_add(parent: &ApplicationWindow) {
             }
 
             if original_text != formatted_text {
-                mac.set_text(&formatted_text);
-
                 let mut chars_before: usize = 0;
                 for (i, ch) in original_text.chars().enumerate() {
                     if (i as i32) >= original_position {
@@ -84,7 +82,16 @@ pub fn show_add(parent: &ApplicationWindow) {
                     }
                 }
 
-                g_editable.set_position(new_position as i32);
+                glib::idle_add_local({
+                    let mac = mac.clone();
+                    let formatted_text = formatted_text.clone();
+                    move || {
+                        let g_editable = mac.upcast_ref::<gtk::Editable>();
+                        mac.set_text(&formatted_text);
+                        g_editable.set_position(new_position as i32);
+                        glib::ControlFlow::Break
+                    }
+                });
             }
 
             validate_form();
@@ -104,19 +111,16 @@ pub fn show_add(parent: &ApplicationWindow) {
             move |_| {
                 let name_text = name.text().to_string().trim().to_string();
                 let mac_text = mac.text().to_string().trim().to_string();
-                if name_text.is_empty() || mac_text.is_empty() {
-                    dialog.add_toast(builder.object::<Toast>("empty_field").unwrap());
-                    return;
-                }
                 match save_device(&name_text, &mac_text) {
                     Ok(()) => {
-                        dialog.add_toast(builder.object::<Toast>("saved_device").unwrap());
-                        return;
+                        let msg = gettext("Classroom added successfully");
+                        dialog.add_toast(Toast::builder().title(&msg).timeout(2).build());
+                        name.set_text("");
+                        mac.set_text("");
                     }
                     Err(err) => {
                         let msg = format!("{}: {}", gettext("Error saving"), err);
                         dialog.add_toast(Toast::builder().title(&msg).timeout(2).build());
-                        return;
                     }
                 }
             }

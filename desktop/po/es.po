@@ -11,6 +11,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.9\n"
 
+msgid "Classroom added successfully"
+msgstr "Aula agregada exitosamente"
+
+msgid "Error saving"
+msgstr "Error al guardar"
+
 msgid "No news images available"
 msgstr "No hay imágenes de noticias disponibles"
 
