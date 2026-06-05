@@ -1,0 +1,44 @@
+using Gtk 4.0;
+
+Grid aula_tarjeta_root {
+  margin-bottom: 6;
+  margin-top: 6;
+  margin-start: 6;
+  margin-end: 6;
+  halign: fill;
+  valign: fill;
+  vexpand: true;
+  hexpand: true;
+
+  styles [
+    "card",
+    "aula-cuadro",
+  ]
+
+  Box contenedor_centro {
+    orientation: vertical;
+    spacing: 8;
+    halign: center;
+    valign: center;
+    hexpand: true;
+    vexpand: true;
+
+    layout {
+      column: 0;
+      row: 0;
+    }
+
+    Label name_label {
+      styles [
+        "aula-nombre",
+      ]
+    }
+
+    Label status_label {
+      styles [
+        "dim-label",
+        "bold",
+      ]
+    }
+  }
+}

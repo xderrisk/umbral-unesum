@@ -5,10 +5,14 @@ mod news;
 mod settings;
 use adw::prelude::*;
 use adw::{Application, ApplicationWindow};
+use gettextrs::{LocaleCategory, bindtextdomain, setlocale, textdomain};
 use gtk::{Box, Builder, Button, gdk, gio, glib};
 
 fn main() {
     gio::resources_register_include!("resources.gresource").expect("Resources could not be loaded");
+    setlocale(LocaleCategory::LcAll, "");
+    bindtextdomain("umbral", "locale").expect("The translation domain could not be linked");
+    textdomain("umbral").expect("The text domain could not be established");
     let app = Application::builder()
         .application_id("edu.unesum.umbral")
         .build();

@@ -1,0 +1,42 @@
+using Gtk 4.0;
+
+Box classrooms_panel {
+  orientation: vertical;
+  margin-top: 16;
+  margin-bottom: 16;
+  margin-start: 16;
+  margin-end: 16;
+
+  Label {
+    label: _("Classroom Status");
+    margin-bottom: 20;
+
+    styles [
+      "heading",
+    ]
+  }
+
+  Stack classrooms_stack {
+    transition-type: crossfade;
+
+    Grid classrooms_grid {
+      column-spacing: 16;
+      row-spacing: 16;
+      halign: center;
+      valign: start;
+    }
+
+    Label empty_label {
+      label: _("Add Classrooms");
+      halign: center;
+      valign: center;
+      vexpand: true;
+      margin-start: 50;
+      margin-end: 50;
+
+      styles [
+        "dim-label",
+      ]
+    }
+  }
+}
