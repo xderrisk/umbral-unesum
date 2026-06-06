@@ -11,13 +11,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.9\n"
 
-#, fuzzy
 msgid "Error saving API Key"
-msgstr "Error al guardar"
+msgstr "Error al guardar la API key"
 
-#, fuzzy
 msgid "API Key updated in local configuration."
-msgstr "Error al guardar"
+msgstr "API key actualizada en la configuración local."
 
 msgid "Hide news: ENABLED"
 msgstr ""
@@ -28,33 +26,32 @@ msgstr ""
 msgid "Classroom added successfully"
 msgstr "Aula agregada exitosamente"
 
-#, fuzzy
 msgid "Error saving local configuration"
-msgstr "Error al guardar"
+msgstr "Error al guardar la configuración local"
 
 msgid "Firebase Auth Error"
-msgstr ""
+msgstr "Error de autenticación de Firebase"
 
 msgid "Firebase API Key is not configured in the application settings."
-msgstr ""
+msgstr "La API Key de Firebase no está configurada en la configuración de la aplicación."
 
 msgid "Connection error during authentication"
-msgstr ""
+msgstr "Error de conexión durante la autenticación"
 
 msgid "The device is already authenticated. Delete the user in the Firebase console to retry."
-msgstr ""
+msgstr "El dispositivo ya está autenticado. Elimina el usuario en Firebase console para volver a intentarlo."
 
 msgid "Authentication error"
-msgstr ""
+msgstr "Error de autenticación"
 
 msgid "Failed to obtain credentials from Firebase Auth"
-msgstr ""
+msgstr "No se pudieron obtener las credenciales de Firebase Auth"
 
 msgid "Connection error during database write"
-msgstr ""
+msgstr "Error de conexión durante la escritura de la base de datos"
 
 msgid "Authentication successful, but database rules rejected the write operation"
-msgstr ""
+msgstr "La autenticación fue exitosa, pero las reglas de la base de datos rechazaron la operación de escritura"
 
 msgid "No news images available"
 msgstr "No hay imágenes de noticias disponibles"
@@ -63,13 +60,13 @@ msgid "Failed to load images"
 msgstr "No se pudieron cargar las imágenes"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Desconocido"
 
 msgid "Error: Payload is not a valid JSON."
-msgstr ""
+msgstr "Error: la carga útil no es un JSON válido."
 
 msgid "Receiver error"
-msgstr ""
+msgstr "Error del receptor"
 
 msgid "Occupied"
 msgstr "Ocupado"
@@ -80,29 +77,26 @@ msgstr "Libre"
 msgid "Settings"
 msgstr "Ajustes"
 
-#, fuzzy
 msgid "Hide News"
-msgstr "Noticias"
+msgstr "Ocultar noticias"
 
 msgid "Firebase API Key"
-msgstr ""
+msgstr "API key de Firebase"
 
 msgid "Real-time classroom monitoring system."
 msgstr "Sistema de monitorización de aulas en tiempo real."
 
-#, fuzzy
-msgid "Add Classroom"
-msgstr "Agregar aulas"
+msgid "Add devices"
+msgstr "Agregar dispositivos"
 
-msgid "Device Information"
-msgstr ""
+msgid "ESP32CAM data"
+msgstr "Datos de ESP32CAM"
 
 msgid "Add"
 msgstr "Agregar"
 
-#, fuzzy
-msgid "Classroom Name"
-msgstr "Agregar aulas"
+msgid "Name"
+msgstr "Nombre"
 
 msgid "MAC Address"
 msgstr "Dirección MAC"
@@ -110,9 +104,8 @@ msgstr "Dirección MAC"
 msgid "Classroom Status"
 msgstr "Estado del aula"
 
-#, fuzzy
 msgid "No Classrooms Added"
-msgstr "Agregar aulas"
+msgstr "No se agregaron aulas"
 
 msgid "News"
 msgstr "Noticias"
@@ -120,18 +113,17 @@ msgstr "Noticias"
 msgid "Add classroom"
 msgstr "Agregar aula"
 
-#, fuzzy
-msgid "About Umbral"
-msgstr "Sobre nosotros"
+msgid "About us"
+msgstr "Sobre Umbral"
 
-#~ msgid "Add devices"
-#~ msgstr "Agregar dispositivos"
+#~ msgid "Add Classroom"
+#~ msgstr "Agregar aula"
 
-#~ msgid "ESP32CAM data"
-#~ msgstr "Datos de ESP32CAM"
+#~ msgid "Device Information"
+#~ msgstr "Información del dispositivo"
 
-#~ msgid "Name"
-#~ msgstr "Nombre"
+#~ msgid "Classroom Name"
+#~ msgstr "Nombre de aula"
 
 #~ msgid "I'll add congurations here"
 #~ msgstr "Agregaré configuraciones aquí"

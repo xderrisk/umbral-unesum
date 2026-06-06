@@ -73,16 +73,16 @@ msgstr ""
 msgid "Real-time classroom monitoring system."
 msgstr ""
 
-msgid "Add Classroom"
+msgid "Add devices"
 msgstr ""
 
-msgid "Device Information"
+msgid "ESP32CAM data"
 msgstr ""
 
 msgid "Add"
 msgstr ""
 
-msgid "Classroom Name"
+msgid "Name"
 msgstr ""
 
 msgid "MAC Address"
@@ -100,5 +100,5 @@ msgstr ""
 msgid "Add classroom"
 msgstr ""
 
-msgid "About Umbral"
+msgid "About us"
 msgstr ""
