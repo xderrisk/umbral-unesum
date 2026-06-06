@@ -2,21 +2,20 @@ use crate::settings;
 use adw::prelude::*;
 use gettextrs::gettext;
 use gtk::glib;
-use gtk::{Box, Builder, Label, Picture};
 use std::cell::RefCell;
 
-pub fn news_section() -> Box {
-    let builder = Builder::from_resource("/edu/unesum/umbral/ui/news_section.ui");
+pub fn news_section() -> gtk::Box {
+    let builder = gtk::Builder::from_resource("/edu/unesum/umbral/ui/news_section.ui");
 
-    let container: Box = builder
-        .object("news_dialog")
-        .expect("Error: 'news_dialog' not found in the UI file.");
+    let container: gtk::Box = builder
+        .object("news_panel")
+        .expect("Error: 'news_panel' not found in the UI file.");
 
-    let news_picture: Picture = builder
+    let news_picture: gtk::Picture = builder
         .object("news_picture")
         .expect("Error: 'news_picture' not found in the UI file.");
 
-    let placeholder_label: Label = builder
+    let placeholder_label: gtk::Label = builder
         .object("placeholder_label")
         .expect("Error: 'placeholder_label' not found in the UI file.");
 

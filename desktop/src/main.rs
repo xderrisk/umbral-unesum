@@ -4,24 +4,28 @@ mod mqtt;
 mod news;
 mod settings;
 use adw::prelude::*;
-use adw::{Application, ApplicationWindow};
-use gettextrs::{LocaleCategory, bindtextdomain, setlocale, textdomain};
-use gtk::{Box, Builder, Button, gdk, gio, glib};
+use gettextrs::{bindtextdomain, setlocale, textdomain};
+use gtk::{gdk, gio, glib};
 
 fn main() {
-    gio::resources_register_include!("resources.gresource").expect("Resources could not be loaded");
-    setlocale(LocaleCategory::LcAll, "");
-    bindtextdomain("umbral", "locale").expect("The translation domain could not be linked");
-    textdomain("umbral").expect("The text domain could not be established");
-    let app = Application::builder()
+    gio::resources_register_include!("resources.gresource")
+        .expect("Failed to load embedded resources");
+
+    setlocale(gettextrs::LocaleCategory::LcAll, "");
+    bindtextdomain("umbral", "locale").expect("Failed to bind the translation domain");
+    textdomain("umbral").expect("Failed to set the text domain");
+
+    let app = adw::Application::builder()
         .application_id("edu.unesum.umbral")
         .build();
+
     app.connect_activate(build_ui);
     app.run();
 }
 
-fn build_ui(app: &Application) {
-    let builder = Builder::from_resource("/edu/unesum/umbral/ui/main_window.ui");
+fn build_ui(app: &adw::Application) {
+    let builder = gtk::Builder::from_resource("/edu/unesum/umbral/ui/main_window.ui");
+
     let provider = gtk::CssProvider::new();
     provider.load_from_data(include_str!("assets/style.css"));
     if let Some(display) = gdk::Display::default() {
@@ -32,20 +36,23 @@ fn build_ui(app: &Application) {
         );
     }
 
-    let window: ApplicationWindow = builder.object("window").expect("No window found");
+    let window: adw::ApplicationWindow = builder
+        .object("window")
+        .expect("Main window object not found in UI file");
     window.set_application(Some(app));
 
     builder
-        .object::<Box>("left_container")
+        .object::<gtk::Box>("left_container")
         .unwrap()
         .append(&news::news_section());
+
     builder
-        .object::<Box>("right_container")
+        .object::<gtk::Box>("right_container")
         .unwrap()
         .append(&classrooms::classrooms_section());
 
-    let connect_dialog = |btn_id: &str, show_fn: fn(&ApplicationWindow)| {
-        let btn: Button = builder.object(btn_id).unwrap();
+    let connect_dialog = |btn_id: &str, show_fn: fn(&adw::ApplicationWindow)| {
+        let btn: gtk::Button = builder.object(btn_id).unwrap();
         btn.connect_clicked(glib::clone!(
             #[weak]
             window,

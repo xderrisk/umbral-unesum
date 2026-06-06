@@ -1,16 +1,15 @@
 use async_channel;
+use gettextrs::gettext;
 use rumqttd::{Broker, Config, Notification};
 use serde_json::Value;
 use std::thread;
 
-pub struct AulaUpdate {
+pub struct ClassroomUpdate {
     pub mac: String,
-    pub estado: String,
+    pub status: String,
 }
 
-// https://rumqtt.bytebeam.io/docs/rumqttd/Guides/Using%20Link%20to%20communicate%20with%20broker/
-
-pub fn init(sender: async_channel::Sender<AulaUpdate>) {
+pub fn init(sender: async_channel::Sender<ClassroomUpdate>) {
     let config = config::Config::builder()
         .add_source(config::File::from_str(
             include_str!("../Rumqttd.toml"),
@@ -27,7 +26,7 @@ pub fn init(sender: async_channel::Sender<AulaUpdate>) {
         broker.start().unwrap();
     });
 
-    link_tx.subscribe("unesum/aulas").unwrap();
+    link_tx.subscribe("unesum/classrooms").unwrap();
     thread::spawn(move || {
         loop {
             match link_rx.recv() {
@@ -35,17 +34,20 @@ pub fn init(sender: async_channel::Sender<AulaUpdate>) {
                     if let Notification::Forward(forward) = notification {
                         if let Ok(json) = serde_json::from_slice::<Value>(&forward.publish.payload)
                         {
-                            let mac = json["mac"].as_str().unwrap_or("Desconocida").to_string();
-                            let estado = json["estado"].as_str().unwrap_or("0").to_string();
-                            let update = AulaUpdate { mac, estado };
+                            let mac = json["mac"]
+                                .as_str()
+                                .unwrap_or(&gettext("Unknown"))
+                                .to_string();
+                            let status = json["status"].as_str().unwrap_or("0").to_string();
+                            let update = ClassroomUpdate { mac, status };
                             let _ = sender.send_blocking(update);
                         } else {
-                            println!("Error: El payload no es un JSON válido.");
+                            println!("{}", gettext("Error: Payload is not a valid JSON."));
                         }
                     }
                 }
                 Ok(None) => thread::sleep(std::time::Duration::from_millis(10)),
-                Err(e) => println!("Error en el receptor: {:?}", e),
+                Err(e) => println!("{}: {:?}", gettext("Receiver error"), e),
             }
         }
     });

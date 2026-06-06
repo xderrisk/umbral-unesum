@@ -11,17 +11,65 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.9\n"
 
+#, fuzzy
+msgid "Error saving API Key"
+msgstr "Error al guardar"
+
+#, fuzzy
+msgid "API Key updated in local configuration."
+msgstr "Error al guardar"
+
+msgid "Hide news: ENABLED"
+msgstr ""
+
+msgid "Hide news: DISABLED"
+msgstr ""
+
 msgid "Classroom added successfully"
 msgstr "Aula agregada exitosamente"
 
-msgid "Error saving"
+#, fuzzy
+msgid "Error saving local configuration"
 msgstr "Error al guardar"
+
+msgid "Firebase Auth Error"
+msgstr ""
+
+msgid "Firebase API Key is not configured in the application settings."
+msgstr ""
+
+msgid "Connection error during authentication"
+msgstr ""
+
+msgid "The device is already authenticated. Delete the user in the Firebase console to retry."
+msgstr ""
+
+msgid "Authentication error"
+msgstr ""
+
+msgid "Failed to obtain credentials from Firebase Auth"
+msgstr ""
+
+msgid "Connection error during database write"
+msgstr ""
+
+msgid "Authentication successful, but database rules rejected the write operation"
+msgstr ""
 
 msgid "No news images available"
 msgstr "No hay imágenes de noticias disponibles"
 
 msgid "Failed to load images"
 msgstr "No se pudieron cargar las imágenes"
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Error: Payload is not a valid JSON."
+msgstr ""
+
+msgid "Receiver error"
+msgstr ""
 
 msgid "Occupied"
 msgstr "Ocupado"
@@ -32,23 +80,29 @@ msgstr "Libre"
 msgid "Settings"
 msgstr "Ajustes"
 
-msgid "I'll add congurations here"
-msgstr "Agregaré configuraciones aquí"
+#, fuzzy
+msgid "Hide News"
+msgstr "Noticias"
+
+msgid "Firebase API Key"
+msgstr ""
 
 msgid "Real-time classroom monitoring system."
 msgstr "Sistema de monitorización de aulas en tiempo real."
 
-msgid "Add devices"
-msgstr "Agregar dispositivos"
+#, fuzzy
+msgid "Add Classroom"
+msgstr "Agregar aulas"
 
-msgid "ESP32CAM data"
-msgstr "Datos de ESP32CAM"
+msgid "Device Information"
+msgstr ""
 
 msgid "Add"
 msgstr "Agregar"
 
-msgid "Name"
-msgstr "Nombre"
+#, fuzzy
+msgid "Classroom Name"
+msgstr "Agregar aulas"
 
 msgid "MAC Address"
 msgstr "Dirección MAC"
@@ -56,7 +110,8 @@ msgstr "Dirección MAC"
 msgid "Classroom Status"
 msgstr "Estado del aula"
 
-msgid "Add Classrooms"
+#, fuzzy
+msgid "No Classrooms Added"
 msgstr "Agregar aulas"
 
 msgid "News"
@@ -65,5 +120,18 @@ msgstr "Noticias"
 msgid "Add classroom"
 msgstr "Agregar aula"
 
-msgid "About us"
+#, fuzzy
+msgid "About Umbral"
 msgstr "Sobre nosotros"
+
+#~ msgid "Add devices"
+#~ msgstr "Agregar dispositivos"
+
+#~ msgid "ESP32CAM data"
+#~ msgstr "Datos de ESP32CAM"
+
+#~ msgid "Name"
+#~ msgstr "Nombre"
+
+#~ msgid "I'll add congurations here"
+#~ msgstr "Agregaré configuraciones aquí"

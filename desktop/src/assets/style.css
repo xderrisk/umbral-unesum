@@ -1,4 +1,4 @@
-.aula-cuadro {
+.classroom-card {
     background-color: var(--card-bg-color);
     border: 1px solid var(--card-border-color);
     border-radius: 20px;
@@ -6,16 +6,16 @@
     min-height: 250px;
 }
 
-.aula-nombre {
+.classroom-name {
     font-size: 24pt;
     font-weight: bold;
 }
 
-.aula-libre {
+.classroom-available {
     background-color: var(--success-bg-color);
 }
 
-.aula-ocupada {
+.classroom-occupied {
     background-color: var(--destructive-bg-color);
 }
 

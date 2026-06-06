@@ -9,7 +9,7 @@ fn compile_blueprint(input: &Path, output: &Path) {
             input.to_str().unwrap(),
         ])
         .status()
-        .expect("No se pudo ejecutar blueprint-compiler");
+        .expect("Failed to execute blueprint-compiler");
     assert!(status.success());
 }
 
@@ -130,7 +130,7 @@ fn main() {
         }
     }
     xml_content.push_str("  </gresource>\n</gresources>\n");
-    fs::write(gresource_xml_path, xml_content).expect("No se pudo escribir gresource.xml");
+    fs::write(gresource_xml_path, xml_content).expect("Failed to write gresource.xml");
     glib_build_tools::compile_resources(&["data"], gresource_xml_path, "resources.gresource");
     generate_pot_file(ui_out);
     update_po_files();

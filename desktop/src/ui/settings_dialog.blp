@@ -1,12 +1,18 @@
 using Gtk 4.0;
 using Adw 1;
 
-Adw.PreferencesDialog config_dialog {
+Adw.PreferencesDialog settings_dialog {
   title: _("Settings");
 
   Adw.PreferencesPage {
     Adw.PreferencesGroup {
-      title: _("I'll add congurations here");
+      Adw.SwitchRow switch_news {
+        title: _("Hide News");
+      }
+
+      Adw.EntryRow entry_api_key {
+        title: _("Firebase API Key");
+      }
     }
   }
 }

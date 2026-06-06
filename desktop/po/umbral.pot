@@ -1,13 +1,58 @@
+msgid "Error saving API Key"
+msgstr ""
+
+msgid "API Key updated in local configuration."
+msgstr ""
+
+msgid "Hide news: ENABLED"
+msgstr ""
+
+msgid "Hide news: DISABLED"
+msgstr ""
+
 msgid "Classroom added successfully"
 msgstr ""
 
-msgid "Error saving"
+msgid "Error saving local configuration"
+msgstr ""
+
+msgid "Firebase Auth Error"
+msgstr ""
+
+msgid "Firebase API Key is not configured in the application settings."
+msgstr ""
+
+msgid "Connection error during authentication"
+msgstr ""
+
+msgid "The device is already authenticated. Delete the user in the Firebase console to retry."
+msgstr ""
+
+msgid "Authentication error"
+msgstr ""
+
+msgid "Failed to obtain credentials from Firebase Auth"
+msgstr ""
+
+msgid "Connection error during database write"
+msgstr ""
+
+msgid "Authentication successful, but database rules rejected the write operation"
 msgstr ""
 
 msgid "No news images available"
 msgstr ""
 
 msgid "Failed to load images"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Error: Payload is not a valid JSON."
+msgstr ""
+
+msgid "Receiver error"
 msgstr ""
 
 msgid "Occupied"
@@ -19,22 +64,25 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-msgid "I'll add congurations here"
+msgid "Hide News"
+msgstr ""
+
+msgid "Firebase API Key"
 msgstr ""
 
 msgid "Real-time classroom monitoring system."
 msgstr ""
 
-msgid "Add devices"
+msgid "Add Classroom"
 msgstr ""
 
-msgid "ESP32CAM data"
+msgid "Device Information"
 msgstr ""
 
 msgid "Add"
 msgstr ""
 
-msgid "Name"
+msgid "Classroom Name"
 msgstr ""
 
 msgid "MAC Address"
@@ -43,7 +91,7 @@ msgstr ""
 msgid "Classroom Status"
 msgstr ""
 
-msgid "Add Classrooms"
+msgid "No Classrooms Added"
 msgstr ""
 
 msgid "News"
@@ -52,5 +100,5 @@ msgstr ""
 msgid "Add classroom"
 msgstr ""
 
-msgid "About us"
+msgid "About Umbral"
 msgstr ""
