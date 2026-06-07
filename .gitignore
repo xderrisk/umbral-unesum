@@ -1,6 +1,6 @@
 desktop/data
 desktop/locale
-desktop/dist
 desktop/target
 espcam/secret.h
+dist
 .zed

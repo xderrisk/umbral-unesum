@@ -1,10 +1,16 @@
 FQBN = --fqbn esp32:esp32:esp32cam
 BUILD = --build-property "build.extra_flags=-DBOARD_HAS_PSRAM"
+.PHONY: desktop package compile upload monitor flash android build
 
-dev:
+desktop:
 	cd desktop && cargo run
-rasp:
+package:
 	cd desktop && cross build --release --target aarch64-unknown-linux-gnu
+	mkdir -p dist
+	tar -czf dist/umbral-arm64.tar.gz \
+		-C $$(pwd)/desktop/target/aarch64-unknown-linux-gnu/release umbral \
+		-C $$(pwd)/desktop locale
+
 compile:
 	cd espcam && arduino-cli compile $(FQBN) $(BUILD) .
 upload: compile
@@ -12,8 +18,10 @@ upload: compile
 monitor:
 	arduino-cli monitor -p /dev/ttyUSB0 -c baudrate=115200
 flash: upload monitor
-package: rasp
-	mkdir -p desktop/dist
-	tar -czf desktop/dist/umbral-arm64.tar.gz \
-		-C $$(pwd)/desktop/target/aarch64-unknown-linux-gnu/release umbral \
-		-C $$(pwd)/desktop locale
+
+android:
+	cd android && flutter run
+build:
+	mkdir -p dist
+	cd android && flutter build apk --release --target-platform android-arm64
+	cp android/build/app/outputs/flutter-apk/app-release.apk dist/umbral-arm64.apk
