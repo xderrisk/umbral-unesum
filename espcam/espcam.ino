@@ -249,7 +249,7 @@ void publishMQTT() {
 
     JsonDocument doc;
     doc["mac"] = macAddress;
-    doc["state"] = currentState;
+    doc["status"] = currentState;
     String payload;
     serializeJson(doc, payload);
 
@@ -258,7 +258,7 @@ void publishMQTT() {
 
     // Intentar MQTT pero no bloquear
     if (mqttClient.connected()) {
-      if (mqttClient.publish("unesum/aulas", payload.c_str())) {
+      if (mqttClient.publish("unesum/classrooms", payload.c_str())) {
         Serial.println("MQTT sent");
       } else {
         Serial.println("MQTT send failed");
