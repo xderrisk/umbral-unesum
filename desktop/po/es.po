@@ -68,11 +68,14 @@ msgstr "Error: la carga útil no es un JSON válido."
 msgid "Receiver error"
 msgstr "Error del receptor"
 
+msgid "Available"
+msgstr "Libre"
+
 msgid "Occupied"
 msgstr "Ocupado"
 
-msgid "Available"
-msgstr "Libre"
+msgid "Offline"
+msgstr "Desconectado"
 
 msgid "Settings"
 msgstr "Ajustes"

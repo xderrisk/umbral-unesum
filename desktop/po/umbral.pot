@@ -55,10 +55,13 @@ msgstr ""
 msgid "Receiver error"
 msgstr ""
 
+msgid "Available"
+msgstr ""
+
 msgid "Occupied"
 msgstr ""
 
-msgid "Available"
+msgid "Offline"
 msgstr ""
 
 msgid "Settings"
