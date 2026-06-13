@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'classroom.dart';
+import 'l10n/app_localizations.dart';
 
 class ClassroomCard extends StatefulWidget {
   final Classroom classroom;
@@ -38,6 +39,7 @@ class _ClassroomCardState extends State<ClassroomCard> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     final now = DateTime.now().millisecondsSinceEpoch;
     final int? lastConn = widget.classroom.lastConnection;
 
@@ -97,8 +99,8 @@ class _ClassroomCardState extends State<ClassroomCard> {
                   const SizedBox(height: 8),
                   Text(
                     !isOnline
-                        ? 'OFFLINE'
-                        : (widget.classroom.isAvailable ? 'FREE' : 'OCCUPIED'),
+                        ? t.offline
+                        : (widget.classroom.isAvailable ? t.free : t.occupied),
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,

@@ -1,0 +1,6 @@
+{
+  "classroomStatus": "Estado de Aulas",
+  "offline": "DESCONECTADO",
+  "free": "LIBRE",
+  "occupied": "OCUPADO"
+}

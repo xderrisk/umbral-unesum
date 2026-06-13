@@ -1,6 +1,6 @@
 name: umbral
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0+1
 
 environment:
@@ -11,6 +11,9 @@ dependencies:
   firebase_database: ^12.4.2
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -19,3 +22,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true

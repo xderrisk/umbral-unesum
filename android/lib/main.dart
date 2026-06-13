@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'firebase_options.dart';
 import 'classroom.dart';
 import 'classroom_card.dart';
+import 'l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +18,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData.light().copyWith(cardColor: const Color(0xFFFFFFFF)),
       darkTheme: ThemeData.dark().copyWith(cardColor: const Color(0xFF2D2D2D)),
       themeMode: ThemeMode.system,
@@ -39,6 +42,7 @@ class _MainClassroomsScreenState extends State<MainClassroomsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -52,8 +56,8 @@ class _MainClassroomsScreenState extends State<MainClassroomsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Classroom Status',
+            Text(
+              t.classroomStatus,
               style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
@@ -68,7 +72,7 @@ class _MainClassroomsScreenState extends State<MainClassroomsScreen> {
                   if (snapshot.hasError) {
                     return Center(
                       child: Text(
-                        'Error de conexión: ${snapshot.error}',
+                        'Connection error: ${snapshot.error}',
                         style: const TextStyle(color: Colors.redAccent),
                       ),
                     );
