@@ -17,8 +17,8 @@ pub fn show_add(parent: &adw::ApplicationWindow) {
         #[weak]
         btn_dialog_add,
         move || {
-            let is_name_ready = !name.text().to_string().trim().is_empty();
-            let is_mac_ready = mac.text().to_string().len() == 17;
+            let is_name_ready = !name.text().trim().is_empty();
+            let is_mac_ready = mac.text().len() == 17;
             btn_dialog_add.set_sensitive(is_name_ready && is_mac_ready);
         }
     );
@@ -104,9 +104,8 @@ pub fn show_add(parent: &adw::ApplicationWindow) {
         #[weak]
         dialog,
         move |_| {
-            let name_text = name.text().to_string().trim().to_string();
-            let mac_text = mac.text().to_string().trim().to_string();
-
+            let name_text = name.text().trim().to_string();
+            let mac_text = mac.text().replace(":", "").trim().to_lowercase();
             name.set_sensitive(false);
             mac.set_sensitive(false);
 
@@ -192,9 +191,8 @@ async fn register_camera_in_firebase(mac: &str, classroom_name: &str) -> Result<
         api_key
     );
 
-    let clean_mac = mac.replace(":", "").to_lowercase();
-    let mock_email = format!("camera_{}@umbral.unesum.edu", clean_mac);
-    let mock_password = format!("Umbral.{}#", clean_mac);
+    let mock_email = format!("camera_{}@umbral.unesum.edu", mac);
+    let mock_password = format!("Umbral.{}#", mac);
 
     let body_auth = serde_json::json!({
         "email": mock_email,
@@ -253,9 +251,6 @@ async fn register_camera_in_firebase(mac: &str, classroom_name: &str) -> Result<
 
     let body_db = serde_json::json!({
         "name": classroom_name,
-        "mac": mac,
-        "status": "disconnected",
-        "last_connection": "never"
     });
 
     let response_db = client

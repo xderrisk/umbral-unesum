@@ -25,9 +25,9 @@ pub fn classrooms_section() -> gtk::Box {
         let mut current_row = 0;
 
         for classroom in classrooms {
-            let name = classroom["name"].as_str().unwrap_or("Classroom");
+            let name = classroom["name"].as_str().unwrap_or("");
             let mac = classroom["mac"].as_str().unwrap_or("").to_string();
-            let status = classroom["status"].as_str().unwrap_or("Disconnected");
+            let status = classroom["status"].as_str().unwrap_or("");
 
             let card_builder =
                 gtk::Builder::from_resource("/edu/unesum/umbral/ui/classroom_card.ui");
@@ -41,18 +41,18 @@ pub fn classrooms_section() -> gtk::Box {
 
             name_label.set_label(name);
 
-            let initial_status = if status == "1" {
-                gettext("Occupied")
-            } else {
-                gettext("Available")
+            let initial_status = match status {
+                "0" => {
+                    card_grid.add_css_class("classroom-available");
+                    gettext("Available")
+                }
+                "1" => {
+                    card_grid.add_css_class("classroom-occupied");
+                    gettext("Occupied")
+                }
+                _ => gettext("Offline"),
             };
             status_label.set_label(&initial_status);
-
-            if status == "1" {
-                card_grid.add_css_class("classroom-occupied");
-            } else {
-                card_grid.add_css_class("classroom-available");
-            }
 
             labels_map.insert(mac.clone(), (status_label.clone(), card_grid.clone()));
             classrooms_grid.attach(&card_grid, current_col, current_row, 1, 1);
@@ -71,20 +71,24 @@ pub fn classrooms_section() -> gtk::Box {
     main_context.spawn_local(async move {
         while let Ok(update) = receiver.recv().await {
             if let Some((label, card)) = labels_map.get(&update.mac) {
-                let status_text = if update.status == "1" {
-                    gettext("Occupied")
-                } else {
-                    gettext("Available")
+                let status_text = match update.status.as_str() {
+                    "0" => {
+                        card.add_css_class("classroom-available");
+                        card.remove_css_class("classroom-occupied");
+                        gettext("Available")
+                    }
+                    "1" => {
+                        card.add_css_class("classroom-occupied");
+                        card.remove_css_class("classroom-available");
+                        gettext("Occupied")
+                    }
+                    _ => {
+                        card.remove_css_class("classroom-available");
+                        card.remove_css_class("classroom-occupied");
+                        gettext("Offline")
+                    }
                 };
                 label.set_label(&status_text);
-
-                if update.status == "1" {
-                    card.add_css_class("classroom-occupied");
-                    card.remove_css_class("classroom-available");
-                } else {
-                    card.add_css_class("classroom-available");
-                    card.remove_css_class("classroom-occupied");
-                }
             }
         }
     });
