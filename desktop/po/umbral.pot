@@ -1,15 +1,6 @@
 msgid "Error saving API Key"
 msgstr ""
 
-msgid "API Key updated in local configuration."
-msgstr ""
-
-msgid "Hide news: ENABLED"
-msgstr ""
-
-msgid "Hide news: DISABLED"
-msgstr ""
-
 msgid "Classroom added successfully"
 msgstr ""
 

@@ -1,5 +1,6 @@
 mod classrooms;
 mod dialogs;
+mod firebase;
 mod mqtt;
 mod news;
 mod settings;
@@ -7,7 +8,6 @@ mod state;
 use adw::prelude::*;
 use gettextrs::{bindtextdomain, setlocale, textdomain};
 use gtk::{gdk, gio, glib};
-use state::AppState;
 
 fn main() {
     gio::resources_register_include!("resources.gresource")
@@ -26,7 +26,7 @@ fn main() {
 }
 
 fn build_ui(app: &adw::Application) {
-    let state = AppState::new();
+    let state = state::AppState::new();
     let builder = gtk::Builder::from_resource("/edu/unesum/umbral/ui/main_window.ui");
 
     let provider = gtk::CssProvider::new();
@@ -68,8 +68,20 @@ fn build_ui(app: &adw::Application) {
         ));
     };
 
-    connect_dialog("btn_add", dialogs::show_add);
-    connect_dialog("btn_config", dialogs::show_config);
+    let setting_dialog =
+        |btn_id: &str, show_fn: fn(&adw::ApplicationWindow, &state::SharedState)| {
+            let btn: gtk::Button = builder.object(btn_id).unwrap();
+            btn.connect_clicked(glib::clone!(
+                #[weak]
+                window,
+                #[strong]
+                state,
+                move |_| show_fn(&window, &state)
+            ));
+        };
+
+    setting_dialog("btn_add", dialogs::show_add);
+    setting_dialog("btn_config", dialogs::show_config);
     connect_dialog("btn_about", dialogs::show_about);
 
     window.present();

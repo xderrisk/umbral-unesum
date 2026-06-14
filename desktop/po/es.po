@@ -14,15 +14,6 @@ msgstr ""
 msgid "Error saving API Key"
 msgstr "Error al guardar la API key"
 
-msgid "API Key updated in local configuration."
-msgstr "API key actualizada en la configuración local."
-
-msgid "Hide news: ENABLED"
-msgstr ""
-
-msgid "Hide news: DISABLED"
-msgstr ""
-
 msgid "Classroom added successfully"
 msgstr "Aula agregada exitosamente"
 
@@ -118,6 +109,13 @@ msgstr "Agregar aula"
 
 msgid "About us"
 msgstr "Sobre Umbral"
+
+#~ msgid "API Key updated in local configuration."
+#~ msgstr "API key actualizada en la configuración local."
+
+#, fuzzy
+#~ msgid "Error saving news preference"
+#~ msgstr "Error al guardar la API key"
 
 #~ msgid "Add Classroom"
 #~ msgstr "Agregar aula"

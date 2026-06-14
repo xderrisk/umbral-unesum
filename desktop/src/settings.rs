@@ -97,15 +97,12 @@ pub fn list_news_images() -> Vec<PathBuf> {
 
 pub fn load_classrooms() -> Vec<Value> {
     let path = get_devices_path();
-
     if !path.exists() {
         fs::write(&path, "[]").expect("Failed to initialize devices.json");
         return Vec::new();
     }
-
     let data = fs::read_to_string(path).unwrap_or_else(|_| "[]".to_string());
     let v: Value = serde_json::from_str(&data).unwrap_or(Value::Array(Vec::new()));
-
     v.as_array().cloned().unwrap_or_default()
 }
 
@@ -122,29 +119,4 @@ pub fn save_device(uid: &str, name: &str, mac: &str) -> Result<(), String> {
         .map_err(|e| format!("Failed to serialize JSON: {}", e))?;
     fs::write(path, json_string).map_err(|e| format!("Failed to write file: {}", e))?;
     Ok(())
-}
-
-pub fn save_api_key(api_key: &str) -> Result<(), String> {
-    let path = get_settings_file_path();
-    let configuration = serde_json::json!({
-        "api_key": api_key.trim(),
-    });
-
-    let json_string = serde_json::to_string_pretty(&configuration)
-        .map_err(|e| format!("Failed to serialize configuration: {}", e))?;
-    fs::write(path, json_string).map_err(|e| format!("Failed to write configuration: {}", e))?;
-    Ok(())
-}
-
-pub fn load_api_key() -> Option<String> {
-    let path = get_settings_file_path();
-    if !path.exists() {
-        return None;
-    }
-
-    let data = fs::read_to_string(path).ok()?;
-    let v: Value = serde_json::from_str(&data).ok()?;
-    v.get("api_key")
-        .and_then(|k| k.as_str())
-        .map(|s| s.to_string())
 }
