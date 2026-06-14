@@ -1,35 +1,67 @@
 use directories::ProjectDirs;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::fs;
 use std::path::PathBuf;
 
-pub fn get_devices_path() -> PathBuf {
-    let proj_dirs = ProjectDirs::from("edu", "unesum", "umbral")
-        .expect("Failed to determine project directories");
-    let config_dir = proj_dirs.config_dir().to_path_buf();
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct Settings {
+    pub api_key: String,
+    pub news: bool,
+}
 
+pub fn load() -> Settings {
+    let load_process = || -> Option<Settings> {
+        let file_path = get_settings_file_path();
+        if !file_path.exists() {
+            return None;
+        }
+        let data = fs::read_to_string(file_path).ok()?;
+        let settings: Settings = serde_json::from_str(&data).ok()?;
+        Some(settings)
+    };
+    load_process().unwrap_or(Settings {
+        api_key: String::new(),
+        news: false,
+    })
+}
+
+pub fn save(settings: &Settings) -> Result<(), std::io::Error> {
+    let file_path = get_settings_file_path();
+    let data = serde_json::to_string_pretty(settings)
+        .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?;
+    fs::write(file_path, data)?;
+    Ok(())
+}
+
+pub fn get_settings_file_path() -> PathBuf {
+    let proj_dirs = get_project_dirs();
+    let config_dir = proj_dirs.config_dir();
     if !config_dir.exists() {
         fs::create_dir_all(&config_dir).expect("Failed to create configuration directory");
     }
+    let file_path = config_dir.join("settings.json");
+    if !file_path.exists() {
+        fs::File::create(&file_path).expect("Failed to create empty settings.json file");
+    }
+    file_path
+}
 
+fn get_project_dirs() -> ProjectDirs {
+    ProjectDirs::from("edu", "unesum", "umbral").expect("Failed to determine project directories")
+}
+
+pub fn get_devices_path() -> PathBuf {
+    let proj_dirs = get_project_dirs();
+    let config_dir = proj_dirs.config_dir();
+    if !config_dir.exists() {
+        fs::create_dir_all(&config_dir).expect("Failed to create configuration directory");
+    }
     config_dir.join("devices.json")
 }
 
-pub fn get_config_path() -> PathBuf {
-    let proj_dirs = ProjectDirs::from("edu", "unesum", "umbral")
-        .expect("Failed to determine project directories");
-    let config_dir = proj_dirs.config_dir().to_path_buf();
-
-    if !config_dir.exists() {
-        fs::create_dir_all(&config_dir).expect("Failed to create configuration directory");
-    }
-
-    config_dir.join("config.json")
-}
-
 pub fn get_app_data_path() -> PathBuf {
-    let proj_dirs = ProjectDirs::from("edu", "unesum", "umbral")
-        .expect("Failed to obtain project data directory");
+    let proj_dirs = get_project_dirs();
     let local_dir = proj_dirs.data_local_dir().to_path_buf();
     if !local_dir.exists() {
         fs::create_dir_all(&local_dir).expect("Failed to create local data directory");
@@ -39,7 +71,11 @@ pub fn get_app_data_path() -> PathBuf {
 
 pub fn news_folder() -> PathBuf {
     let path = get_app_data_path();
-    path.join("news")
+    let news_dir = path.join("news");
+    if !news_dir.exists() {
+        fs::create_dir_all(&news_dir).expect("Failed to create news cache directory");
+    }
+    news_dir
 }
 
 pub fn list_news_images() -> Vec<PathBuf> {
@@ -89,7 +125,7 @@ pub fn save_device(uid: &str, name: &str, mac: &str) -> Result<(), String> {
 }
 
 pub fn save_api_key(api_key: &str) -> Result<(), String> {
-    let path = get_config_path();
+    let path = get_settings_file_path();
     let configuration = serde_json::json!({
         "api_key": api_key.trim(),
     });
@@ -101,7 +137,7 @@ pub fn save_api_key(api_key: &str) -> Result<(), String> {
 }
 
 pub fn load_api_key() -> Option<String> {
-    let path = get_config_path();
+    let path = get_settings_file_path();
     if !path.exists() {
         return None;
     }

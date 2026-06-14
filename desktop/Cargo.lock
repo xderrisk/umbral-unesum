@@ -3597,6 +3597,7 @@ dependencies = [
  "libadwaita",
  "reqwest",
  "rumqttd",
+ "serde",
  "serde_json",
  "tokio",
 ]

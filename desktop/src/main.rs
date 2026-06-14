@@ -3,9 +3,11 @@ mod dialogs;
 mod mqtt;
 mod news;
 mod settings;
+mod state;
 use adw::prelude::*;
 use gettextrs::{bindtextdomain, setlocale, textdomain};
 use gtk::{gdk, gio, glib};
+use state::AppState;
 
 fn main() {
     gio::resources_register_include!("resources.gresource")
@@ -24,6 +26,7 @@ fn main() {
 }
 
 fn build_ui(app: &adw::Application) {
+    let state = AppState::new();
     let builder = gtk::Builder::from_resource("/edu/unesum/umbral/ui/main_window.ui");
 
     let provider = gtk::CssProvider::new();
@@ -41,10 +44,15 @@ fn build_ui(app: &adw::Application) {
         .expect("Main window object not found in UI file");
     window.set_application(Some(app));
 
-    builder
-        .object::<gtk::Box>("left_container")
-        .unwrap()
-        .append(&news::news_section());
+    let separator: gtk::Separator = builder.object("main_separator").unwrap();
+    if state.borrow().settings.news {
+        builder
+            .object::<gtk::Box>("left_container")
+            .unwrap()
+            .append(&news::news_section());
+    } else {
+        separator.set_visible(false);
+    }
 
     builder
         .object::<gtk::Box>("right_container")
