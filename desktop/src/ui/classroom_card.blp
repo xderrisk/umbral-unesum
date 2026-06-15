@@ -15,6 +15,26 @@ Grid classroom_card_root {
     "classroom-card",
   ]
 
+  Button btn_delete {
+    icon-name: "user-trash-symbolic";
+    halign: end;
+    valign: start;
+    margin-top: 4;
+    margin-end: 4;
+
+    layout {
+      column: 1;
+      row: 0;
+    }
+
+    styles [
+      "flat",
+      "destructive-action",
+      "circular",
+      "btn-delete-hover",
+    ]
+  }
+
   Box center_container {
     orientation: vertical;
     spacing: 8;
@@ -26,6 +46,8 @@ Grid classroom_card_root {
     layout {
       column: 0;
       row: 0;
+      column-span: 2;
+      row-span: 2;
     }
 
     Label name_label {

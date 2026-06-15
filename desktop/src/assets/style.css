@@ -2,8 +2,8 @@
     background-color: var(--card-bg-color);
     border: 1px solid var(--card-border-color);
     border-radius: 20px;
-    min-width: 300px;
-    min-height: 250px;
+    min-width: 200px;
+    min-height: 170px;
 }
 
 .classroom-name {
@@ -21,4 +21,13 @@
 
 .news-image {
     border-radius: 12px;
+}
+
+.classroom-card .btn-delete-hover {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.classroom-card:hover .btn-delete-hover {
+    opacity: 1;
 }

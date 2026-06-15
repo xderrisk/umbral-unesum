@@ -19,11 +19,13 @@ Box classrooms_panel {
   Stack classrooms_stack {
     transition-type: crossfade;
 
-    Grid classrooms_grid {
+    FlowBox classrooms_flowbox {
       column-spacing: 16;
       row-spacing: 16;
-      halign: center;
+      halign: fill;
       valign: start;
+      selection-mode: none;
+      min-children-per-line: 1;
     }
 
     Label empty_label {

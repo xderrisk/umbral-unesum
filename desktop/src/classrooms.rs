@@ -8,7 +8,7 @@ use std::collections::HashMap;
 pub fn classrooms_section() -> gtk::Box {
     let builder = gtk::Builder::from_resource("/edu/unesum/umbral/ui/classrooms_section.ui");
     let container: gtk::Box = builder.object("classrooms_panel").unwrap();
-    let classrooms_grid: gtk::Grid = builder.object("classrooms_grid").unwrap();
+    let classrooms_flowbox: gtk::FlowBox = builder.object("classrooms_flowbox").unwrap();
     let classrooms_stack: gtk::Stack = builder.object("classrooms_stack").unwrap();
     let empty_label: gtk::Label = builder.object("empty_label").unwrap();
 
@@ -16,13 +16,11 @@ pub fn classrooms_section() -> gtk::Box {
     let (sender, receiver) = async_channel::unbounded::<crate::mqtt::ClassroomUpdate>();
 
     let classrooms = settings::load_classrooms();
-
-    if !classrooms.is_empty() {
-        classrooms_stack.set_visible_child(&classrooms_grid);
-
-        let max_columns = 1;
-        let mut current_col = 0;
-        let mut current_row = 0;
+    let total_classrooms = classrooms.len();
+    if total_classrooms > 0 {
+        classrooms_stack.set_visible_child(&classrooms_flowbox);
+        let max_columns = (total_classrooms + 2) / 3;
+        classrooms_flowbox.set_max_children_per_line(max_columns as u32);
 
         for classroom in classrooms {
             let name = classroom["name"].as_str().unwrap_or("");
@@ -55,13 +53,7 @@ pub fn classrooms_section() -> gtk::Box {
             status_label.set_label(&initial_status);
 
             labels_map.insert(mac.clone(), (status_label.clone(), card_grid.clone()));
-            classrooms_grid.attach(&card_grid, current_col, current_row, 1, 1);
-
-            current_col += 1;
-            if current_col >= max_columns {
-                current_col = 0;
-                current_row += 1;
-            }
+            classrooms_flowbox.insert(&card_grid, -1);
         }
     } else {
         classrooms_stack.set_visible_child(&empty_label);

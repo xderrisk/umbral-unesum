@@ -110,6 +110,14 @@ msgstr "Agregar aula"
 msgid "About us"
 msgstr "Sobre Umbral"
 
+#, fuzzy
+#~ msgid "Connection error during Firebase deletion"
+#~ msgstr "Error de conexión durante la escritura de la base de datos"
+
+#, fuzzy
+#~ msgid "Classroom removed successfully"
+#~ msgstr "Aula agregada exitosamente"
+
 #~ msgid "API Key updated in local configuration."
 #~ msgstr "API key actualizada en la configuración local."
 
