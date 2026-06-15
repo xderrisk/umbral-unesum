@@ -45,44 +45,59 @@ fn build_ui(app: &adw::Application) {
     window.set_application(Some(app));
 
     let separator: gtk::Separator = builder.object("main_separator").unwrap();
-    if state.borrow().settings.news {
-        builder
-            .object::<gtk::Box>("left_container")
-            .unwrap()
-            .append(&news::news_section());
-    } else {
-        separator.set_visible(false);
-    }
+    let left_container: gtk::Box = builder.object("left_container").unwrap();
+    let right_container: gtk::Box = builder.object("right_container").unwrap();
 
-    builder
-        .object::<gtk::Box>("right_container")
-        .unwrap()
-        .append(&classrooms::classrooms_section());
+    left_container.append(&news::news_section());
+    right_container.append(&classrooms::classrooms_section());
 
-    let connect_dialog = |btn_id: &str, show_fn: fn(&adw::ApplicationWindow)| {
-        let btn: gtk::Button = builder.object(btn_id).unwrap();
-        btn.connect_clicked(glib::clone!(
-            #[weak]
-            window,
-            move |_| show_fn(&window)
-        ));
-    };
+    let is_news_enabled = state.borrow().settings.news;
+    left_container.set_visible(is_news_enabled);
+    separator.set_visible(is_news_enabled);
 
-    let setting_dialog =
-        |btn_id: &str, show_fn: fn(&adw::ApplicationWindow, &state::SharedState)| {
-            let btn: gtk::Button = builder.object(btn_id).unwrap();
-            btn.connect_clicked(glib::clone!(
-                #[weak]
-                window,
-                #[strong]
-                state,
-                move |_| show_fn(&window, &state)
-            ));
-        };
+    let btn_add: gtk::Button = builder.object("btn_add").unwrap();
+    btn_add.connect_clicked(glib::clone!(
+        #[weak]
+        window,
+        #[strong]
+        state,
+        move |_| dialogs::show_add(&window, &state)
+    ));
 
-    setting_dialog("btn_add", dialogs::show_add);
-    setting_dialog("btn_config", dialogs::show_config);
-    connect_dialog("btn_about", dialogs::show_about);
+    let btn_full: gtk::Button = builder.object("btn_full").unwrap();
+    btn_full.connect_clicked(glib::clone!(
+        #[weak]
+        window,
+        move |_| {
+            if window.is_fullscreen() {
+                window.unfullscreen();
+            } else {
+                window.fullscreen();
+            }
+        }
+    ));
+
+    let btn_config: gtk::Button = builder.object("btn_config").unwrap();
+    btn_config.connect_clicked(glib::clone!(
+        #[weak]
+        window,
+        #[strong]
+        state,
+        #[weak]
+        left_container,
+        #[weak]
+        separator,
+        move |_| {
+            dialogs::show_config(&window, &state, left_container.clone(), separator.clone());
+        }
+    ));
+
+    let btn_about: gtk::Button = builder.object("btn_about").unwrap();
+    btn_about.connect_clicked(glib::clone!(
+        #[weak]
+        window,
+        move |_| dialogs::show_about(&window)
+    ));
 
     window.present();
 }

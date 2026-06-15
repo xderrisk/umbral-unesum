@@ -3,7 +3,12 @@ use adw::prelude::*;
 use gettextrs::gettext;
 use gtk::glib;
 
-pub fn show_config(parent: &adw::ApplicationWindow, state: &SharedState) {
+pub fn show_config(
+    parent: &adw::ApplicationWindow,
+    state: &SharedState,
+    left_container: gtk::Box,
+    separator: gtk::Separator,
+) {
     let builder = gtk::Builder::from_resource("/edu/unesum/umbral/ui/settings_dialog.ui");
     let dialog: adw::PreferencesDialog = builder
         .object("settings_dialog")
@@ -36,12 +41,31 @@ pub fn show_config(parent: &adw::ApplicationWindow, state: &SharedState) {
     switch_news.connect_active_notify(glib::clone!(
         #[strong]
         state,
+        #[weak]
+        parent,
+        #[weak]
+        left_container,
+        #[weak]
+        separator,
         move |sw| {
+            let is_active = sw.is_active();
             let mut current_state = state.borrow_mut();
-            current_state.settings.news = sw.is_active();
+            current_state.settings.news = is_active;
             if let Err(e) = crate::settings::save(&current_state.settings) {
                 eprintln!("Error saving setting: {}", e);
             }
+            glib::MainContext::default().invoke_local(glib::clone!(move || {
+                let (current_width, current_height) = parent.default_size();
+                left_container.set_visible(is_active);
+                separator.set_visible(is_active);
+                if is_active {
+                    parent.set_default_size(current_width + 360, current_height);
+                } else {
+                    if current_width > 360 {
+                        parent.set_default_size(current_width - 360, current_height);
+                    }
+                }
+            }));
         }
     ));
 

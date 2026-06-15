@@ -24,6 +24,12 @@ Adw.ApplicationWindow window {
         icon-name: "settings-symbolic";
         tooltip-text: _("Settings");
       }
+
+      [end]
+      Button btn_full {
+        icon-name: "view-fullscreen-symbolic";
+        tooltip-text: _("Fullscreen");
+      }
     }
 
     content: Box {
@@ -31,7 +37,7 @@ Adw.ApplicationWindow window {
       spacing: 0;
 
       Box left_container {
-        hexpand: true;
+        hexpand: false;
       }
 
       Separator main_separator {
@@ -39,7 +45,7 @@ Adw.ApplicationWindow window {
       }
 
       Box right_container {
-        hexpand: false;
+        hexpand: true;
       }
     };
   };

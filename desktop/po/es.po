@@ -71,8 +71,9 @@ msgstr "Desconectado"
 msgid "Settings"
 msgstr "Ajustes"
 
-msgid "Hide News"
-msgstr "Ocultar noticias"
+#, fuzzy
+msgid "Show News"
+msgstr "Noticias"
 
 msgid "Firebase API Key"
 msgstr "API key de Firebase"
@@ -109,6 +110,12 @@ msgstr "Agregar aula"
 
 msgid "About us"
 msgstr "Sobre Umbral"
+
+msgid "Fullscreen"
+msgstr ""
+
+#~ msgid "Hide News"
+#~ msgstr "Ocultar noticias"
 
 #, fuzzy
 #~ msgid "Connection error during Firebase deletion"

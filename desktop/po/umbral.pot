@@ -58,7 +58,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-msgid "Hide News"
+msgid "Show News"
 msgstr ""
 
 msgid "Firebase API Key"
@@ -95,4 +95,7 @@ msgid "Add classroom"
 msgstr ""
 
 msgid "About us"
+msgstr ""
+
+msgid "Fullscreen"
 msgstr ""
