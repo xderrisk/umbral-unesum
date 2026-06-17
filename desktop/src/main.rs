@@ -49,7 +49,7 @@ fn build_ui(app: &adw::Application) {
     let right_container: gtk::Box = builder.object("right_container").unwrap();
 
     left_container.append(&news::news_section());
-    right_container.append(&classrooms::classrooms_section());
+    right_container.append(&classrooms::classrooms_section(&state));
 
     let is_news_enabled = state.borrow().settings.news;
     left_container.set_visible(is_news_enabled);

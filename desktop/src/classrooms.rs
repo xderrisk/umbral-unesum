@@ -1,11 +1,13 @@
 use crate::settings;
+use crate::state::SharedState;
 use adw::prelude::*;
 use async_channel;
 use gettextrs::gettext;
 use gtk::glib;
 use std::collections::HashMap;
 
-pub fn classrooms_section() -> gtk::Box {
+pub fn classrooms_section(state: &SharedState) -> gtk::Box {
+    let api_key = state.borrow().settings.api_key.clone();
     let builder = gtk::Builder::from_resource("/edu/unesum/umbral/ui/classrooms_section.ui");
     let container: gtk::Box = builder.object("classrooms_panel").unwrap();
     let classrooms_flowbox: gtk::FlowBox = builder.object("classrooms_flowbox").unwrap();
@@ -36,8 +38,9 @@ pub fn classrooms_section() -> gtk::Box {
 
             let name_label: gtk::Label = card_builder.object("name_label").unwrap();
             let status_label: gtk::Label = card_builder.object("status_label").unwrap();
+            let btn_delete: gtk::Button = card_builder.object("btn_delete").unwrap();
 
-            name_label.set_label(name);
+            name_label.set_label(&name);
 
             let initial_status = match status {
                 "0" => {
@@ -51,6 +54,60 @@ pub fn classrooms_section() -> gtk::Box {
                 _ => gettext("Offline"),
             };
             status_label.set_label(&initial_status);
+
+            let mac_clone = mac.clone();
+            let api_key_clone = api_key.clone();
+            let card_grid_clone = card_grid.clone();
+            let classrooms_flowbox_weak = classrooms_flowbox.downgrade();
+
+            btn_delete.connect_clicked(move |btn| {
+                btn.set_sensitive(false);
+                let mac_thread = mac_clone.clone();
+                let api_key_thread = api_key_clone.clone();
+                let (tx, rx) = async_channel::bounded::<Result<(), String>>(1);
+                let btn_weak = btn.downgrade();
+                let card_grid_ui = card_grid_clone.clone();
+                let flowbox_weak = classrooms_flowbox_weak.clone();
+                let mac_ui = mac_thread.clone();
+
+                glib::MainContext::default().spawn_local(async move {
+                    if let Ok(res) = rx.recv().await {
+                        match res {
+                            Ok(()) => {
+                                if let Err(e) = settings::delete_device(&mac_ui) {
+                                    eprintln!("Error local: {}", e);
+                                }
+                                if let Some(flowbox) = flowbox_weak.upgrade() {
+                                    flowbox.remove(&card_grid_ui);
+                                }
+                            }
+                            Err(err_msg) => {
+                                eprintln!("Error when deleting: {}", err_msg);
+                                if let Some(b) = btn_weak.upgrade() {
+                                    b.set_sensitive(true);
+                                }
+                            }
+                        }
+                    }
+                });
+
+                std::thread::spawn(move || {
+                    let rt = tokio::runtime::Builder::new_current_thread()
+                        .enable_all()
+                        .build()
+                        .unwrap();
+
+                    let operation = async {
+                        let (uid, id_token) =
+                            crate::firebase::login_camera(&mac_thread, &api_key_thread).await?;
+                        crate::firebase::delete_camera(&uid, &id_token, &api_key_thread).await?;
+                        Ok(())
+                    };
+
+                    let result = rt.block_on(operation);
+                    let _ = rt.block_on(tx.send(result));
+                });
+            });
 
             labels_map.insert(mac.clone(), (status_label.clone(), card_grid.clone()));
             classrooms_flowbox.insert(&card_grid, -1);

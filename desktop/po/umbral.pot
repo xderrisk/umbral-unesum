@@ -31,6 +31,33 @@ msgstr ""
 msgid "Authentication successful, but database rules rejected the write operation"
 msgstr ""
 
+msgid "Missing required parameters for deletion."
+msgstr ""
+
+msgid "Connection error during database deletion"
+msgstr ""
+
+msgid "Failed to delete database record"
+msgstr ""
+
+msgid "Connection error during account deletion"
+msgstr ""
+
+msgid "Error deleting Firebase account"
+msgstr ""
+
+msgid "Firebase API Key is not configured."
+msgstr ""
+
+msgid "Connection error during camera login"
+msgstr ""
+
+msgid "Failed to parse credentials from login response."
+msgstr ""
+
+msgid "Authentication failed for camera deletion"
+msgstr ""
+
 msgid "No news images available"
 msgstr ""
 

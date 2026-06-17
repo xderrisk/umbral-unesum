@@ -120,3 +120,24 @@ pub fn save_device(uid: &str, name: &str, mac: &str) -> Result<(), String> {
     fs::write(path, json_string).map_err(|e| format!("Failed to write file: {}", e))?;
     Ok(())
 }
+
+pub fn delete_device(mac: &str) -> Result<(), String> {
+    let path = get_devices_path();
+    let mut devices = load_classrooms();
+    if let Some(index) = devices.iter().position(|device| {
+        device
+            .get("mac")
+            .and_then(|m| m.as_str())
+            .map(|m| m == mac)
+            .unwrap_or(false)
+    }) {
+        devices.remove(index);
+        let json_string = serde_json::to_string_pretty(&devices)
+            .map_err(|e| format!("Failed to serialize JSON: {}", e))?;
+        std::fs::write(path, json_string).map_err(|e| format!("Failed to write file: {}", e))?;
+
+        Ok(())
+    } else {
+        Err(format!("Device with MAC {} not found locally", mac))
+    }
+}

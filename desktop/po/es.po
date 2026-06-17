@@ -44,6 +44,39 @@ msgstr "Error de conexión durante la escritura de la base de datos"
 msgid "Authentication successful, but database rules rejected the write operation"
 msgstr "La autenticación fue exitosa, pero las reglas de la base de datos rechazaron la operación de escritura"
 
+msgid "Missing required parameters for deletion."
+msgstr ""
+
+#, fuzzy
+msgid "Connection error during database deletion"
+msgstr "Error de conexión durante la escritura de la base de datos"
+
+msgid "Failed to delete database record"
+msgstr ""
+
+#, fuzzy
+msgid "Connection error during account deletion"
+msgstr "Error de conexión durante la escritura de la base de datos"
+
+msgid "Error deleting Firebase account"
+msgstr ""
+
+#, fuzzy
+msgid "Firebase API Key is not configured."
+msgstr "La API Key de Firebase no está configurada en la configuración de la aplicación."
+
+#, fuzzy
+msgid "Connection error during camera login"
+msgstr "Error de conexión durante la autenticación"
+
+#, fuzzy
+msgid "Failed to parse credentials from login response."
+msgstr "No se pudieron obtener las credenciales de Firebase Auth"
+
+#, fuzzy
+msgid "Authentication failed for camera deletion"
+msgstr "Error de autenticación"
+
 msgid "No news images available"
 msgstr "No hay imágenes de noticias disponibles"
 
@@ -116,10 +149,6 @@ msgstr ""
 
 #~ msgid "Hide News"
 #~ msgstr "Ocultar noticias"
-
-#, fuzzy
-#~ msgid "Connection error during Firebase deletion"
-#~ msgstr "Error de conexión durante la escritura de la base de datos"
 
 #, fuzzy
 #~ msgid "Classroom removed successfully"
