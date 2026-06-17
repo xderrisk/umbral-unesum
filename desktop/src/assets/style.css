@@ -23,11 +23,11 @@
     border-radius: 12px;
 }
 
-.classroom-card .btn-delete-hover {
+.classroom-card .btn-hover {
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
 }
 
-.classroom-card:hover .btn-delete-hover {
+.classroom-card:hover .btn-hover {
     opacity: 1;
 }

@@ -15,6 +15,25 @@ Grid classroom_card_root {
     "classroom-card",
   ]
 
+  Button btn_edit {
+    icon-name: "document-edit-symbolic";
+    halign: start;
+    valign: start;
+    margin-top: 4;
+    margin-start: 4;
+
+    layout {
+      column: 0;
+      row: 0;
+    }
+
+    styles [
+      "flat",
+      "circular",
+      "btn-hover",
+    ]
+  }
+
   Button btn_delete {
     icon-name: "user-trash-symbolic";
     halign: end;
@@ -31,7 +50,7 @@ Grid classroom_card_root {
       "flat",
       "destructive-action",
       "circular",
-      "btn-delete-hover",
+      "btn-hover",
     ]
   }
 
