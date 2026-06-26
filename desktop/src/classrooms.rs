@@ -39,6 +39,7 @@ pub fn classrooms_section(state: &SharedState) -> gtk::Box {
             let name_label: gtk::Label = card_builder.object("name_label").unwrap();
             let status_label: gtk::Label = card_builder.object("status_label").unwrap();
             let btn_delete: gtk::Button = card_builder.object("btn_delete").unwrap();
+            let btn_edit: gtk::Button = card_builder.object("btn_edit").unwrap();
 
             name_label.set_label(&name);
 
@@ -107,6 +108,81 @@ pub fn classrooms_section(state: &SharedState) -> gtk::Box {
                     let result = rt.block_on(operation);
                     let _ = rt.block_on(tx.send(result));
                 });
+            });
+
+            let name_label_edit = name_label.clone();
+            let mac_edit = mac.clone();
+            let api_key_edit = api_key.clone();
+
+            btn_edit.connect_clicked(move |btn| {
+                let entry = gtk::Entry::builder()
+                    .text(name_label_edit.label())
+                    .activates_default(true)
+                    .build();
+                let dialog = adw::AlertDialog::builder()
+                    .heading(gettext("Edit classroom name"))
+                    .extra_child(&entry)
+                    .build();
+                dialog.add_response("cancel", &gettext("Cancel"));
+                dialog.add_response("save", &gettext("Save"));
+                dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);
+                dialog.set_default_response(Some("save"));
+                dialog.set_close_response("cancel");
+
+                let name_label_resp = name_label_edit.clone();
+                let mac_resp = mac_edit.clone();
+                let api_key_resp = api_key_edit.clone();
+                dialog.connect_response(None, move |_, response| {
+                    if response != "save" {
+                        return;
+                    }
+                    let new_name = entry.text().trim().to_string();
+                    if new_name.is_empty() {
+                        return;
+                    }
+
+                    let (tx, rx) = async_channel::bounded::<Result<(), String>>(1);
+                    let name_label_ui = name_label_resp.clone();
+                    let mac_ui = mac_resp.clone();
+                    let new_name_ui = new_name.clone();
+
+                    glib::MainContext::default().spawn_local(async move {
+                        if let Ok(res) = rx.recv().await {
+                            match res {
+                                Ok(()) => {
+                                    if let Err(e) = settings::rename_device(&mac_ui, &new_name_ui) {
+                                        eprintln!("Error local: {}", e);
+                                    }
+                                    name_label_ui.set_label(&new_name_ui);
+                                }
+                                Err(err_msg) => eprintln!("Error when editing: {}", err_msg),
+                            }
+                        }
+                    });
+
+                    let mac_thread = mac_resp.clone();
+                    let api_key_thread = api_key_resp.clone();
+                    let new_name_thread = new_name.clone();
+                    std::thread::spawn(move || {
+                        let rt = tokio::runtime::Builder::new_current_thread()
+                            .enable_all()
+                            .build()
+                            .unwrap();
+
+                        let operation = async {
+                            let (uid, id_token) =
+                                crate::firebase::login_camera(&mac_thread, &api_key_thread).await?;
+                            crate::firebase::update_camera_name(&uid, &id_token, &new_name_thread)
+                                .await?;
+                            Ok(())
+                        };
+
+                        let result = rt.block_on(operation);
+                        let _ = rt.block_on(tx.send(result));
+                    });
+                });
+
+                dialog.present(Some(btn));
             });
 
             labels_map.insert(mac.clone(), (status_label.clone(), card_grid.clone()));

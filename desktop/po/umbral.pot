@@ -46,6 +46,15 @@ msgstr ""
 msgid "Error deleting Firebase account"
 msgstr ""
 
+msgid "Missing required parameters for update."
+msgstr ""
+
+msgid "Connection error during database update"
+msgstr ""
+
+msgid "Failed to update database record"
+msgstr ""
+
 msgid "Firebase API Key is not configured."
 msgstr ""
 
@@ -80,6 +89,15 @@ msgid "Occupied"
 msgstr ""
 
 msgid "Offline"
+msgstr ""
+
+msgid "Edit classroom name"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid "Settings"

@@ -61,6 +61,16 @@ msgstr "Error de conexión durante la escritura de la base de datos"
 msgid "Error deleting Firebase account"
 msgstr ""
 
+msgid "Missing required parameters for update."
+msgstr ""
+
+#, fuzzy
+msgid "Connection error during database update"
+msgstr "Error de conexión durante la escritura de la base de datos"
+
+msgid "Failed to update database record"
+msgstr ""
+
 #, fuzzy
 msgid "Firebase API Key is not configured."
 msgstr "La API Key de Firebase no está configurada en la configuración de la aplicación."
@@ -100,6 +110,16 @@ msgstr "Ocupado"
 
 msgid "Offline"
 msgstr "Desconectado"
+
+#, fuzzy
+msgid "Edit classroom name"
+msgstr "Nombre de aula"
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Save"
+msgstr ""
 
 msgid "Settings"
 msgstr "Ajustes"
@@ -147,6 +167,10 @@ msgstr "Sobre Umbral"
 msgid "Fullscreen"
 msgstr ""
 
+#, fuzzy
+#~ msgid "New Name"
+#~ msgstr "Nombre"
+
 #~ msgid "Hide News"
 #~ msgstr "Ocultar noticias"
 
@@ -166,9 +190,6 @@ msgstr ""
 
 #~ msgid "Device Information"
 #~ msgstr "Información del dispositivo"
-
-#~ msgid "Classroom Name"
-#~ msgstr "Nombre de aula"
 
 #~ msgid "I'll add congurations here"
 #~ msgstr "Agregaré configuraciones aquí"
