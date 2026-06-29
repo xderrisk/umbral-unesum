@@ -6,6 +6,11 @@
     min-height: 170px;
 }
 
+.news-hidden .classroom-card {
+    min-width: 300px;
+    min-height: 255px;
+}
+
 .classroom-name {
     font-size: 24pt;
     font-weight: bold;

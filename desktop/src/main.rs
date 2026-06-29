@@ -49,7 +49,8 @@ fn build_ui(app: &adw::Application) {
     let right_container: gtk::Box = builder.object("right_container").unwrap();
 
     left_container.append(&news::news_section());
-    right_container.append(&classrooms::classrooms_section(&state));
+    let (classrooms_section_box, classrooms_relayout) = classrooms::classrooms_section(&state);
+    right_container.append(&classrooms_section_box);
 
     let is_news_enabled = state.borrow().settings.news;
     left_container.set_visible(is_news_enabled);
@@ -87,8 +88,16 @@ fn build_ui(app: &adw::Application) {
         left_container,
         #[weak]
         separator,
+        #[strong]
+        classrooms_relayout,
         move |_| {
-            dialogs::show_config(&window, &state, left_container.clone(), separator.clone());
+            dialogs::show_config(
+                &window,
+                &state,
+                left_container.clone(),
+                separator.clone(),
+                classrooms_relayout.clone(),
+            );
         }
     ));
 

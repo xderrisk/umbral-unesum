@@ -2,12 +2,14 @@ use crate::state::SharedState;
 use adw::prelude::*;
 use gettextrs::gettext;
 use gtk::glib;
+use std::rc::Rc;
 
 pub fn show_config(
     parent: &adw::ApplicationWindow,
     state: &SharedState,
     left_container: gtk::Box,
     separator: gtk::Separator,
+    classrooms_relayout: Rc<dyn Fn()>,
 ) {
     let builder = gtk::Builder::from_resource("/edu/unesum/umbral/ui/settings_dialog.ui");
     let dialog: adw::PreferencesDialog = builder
@@ -47,6 +49,8 @@ pub fn show_config(
         left_container,
         #[weak]
         separator,
+        #[strong]
+        classrooms_relayout,
         move |sw| {
             let is_active = sw.is_active();
             let mut current_state = state.borrow_mut();
@@ -54,6 +58,8 @@ pub fn show_config(
             if let Err(e) = crate::settings::save(&current_state.settings) {
                 eprintln!("Error saving setting: {}", e);
             }
+            drop(current_state);
+            classrooms_relayout();
             glib::MainContext::default().invoke_local(glib::clone!(move || {
                 let (current_width, current_height) = parent.default_size();
                 left_container.set_visible(is_active);

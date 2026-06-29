@@ -8,7 +8,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-pub fn classrooms_section(state: &SharedState) -> gtk::Box {
+pub fn classrooms_section(state: &SharedState) -> (gtk::Box, Rc<dyn Fn()>) {
     let api_key = state.borrow().settings.api_key.clone();
     let builder = gtk::Builder::from_resource("/edu/unesum/umbral/ui/classrooms_section.ui");
     let container: gtk::Box = builder.object("classrooms_panel").unwrap();
@@ -22,12 +22,14 @@ pub fn classrooms_section(state: &SharedState) -> gtk::Box {
     let status_cache: Rc<RefCell<HashMap<String, String>>> = Rc::new(RefCell::new(HashMap::new()));
     let (sender, receiver) = async_channel::unbounded::<crate::mqtt::ClassroomUpdate>();
 
-    let populate = {
+    let populate = Rc::new({
+        let container = container.clone();
         let classrooms_flowbox = classrooms_flowbox.clone();
         let classrooms_stack = classrooms_stack.clone();
         let empty_label = empty_label.clone();
         let labels_map = labels_map.clone();
         let status_cache = status_cache.clone();
+        let state = state.clone();
         let api_key = api_key.clone();
         move || {
             while let Some(child) = classrooms_flowbox.first_child() {
@@ -42,8 +44,19 @@ pub fn classrooms_section(state: &SharedState) -> gtk::Box {
                 return;
             }
             classrooms_stack.set_visible_child(&classrooms_flowbox);
-            let max_columns = (total_classrooms + 2) / 3;
+            let news_on = state.borrow().settings.news;
+            // ponytail: 2 rows when news hidden → more columns, halign:fill+aspect-ratio scales cards up
+            let max_columns = if news_on {
+                (total_classrooms + 2) / 3
+            } else {
+                (total_classrooms + 1) / 2
+            };
             classrooms_flowbox.set_max_children_per_line(max_columns as u32);
+            if news_on {
+                container.remove_css_class("news-hidden");
+            } else {
+                container.add_css_class("news-hidden");
+            }
 
             for classroom in classrooms {
                 let name = classroom["name"].as_str().unwrap_or("");
@@ -213,7 +226,7 @@ pub fn classrooms_section(state: &SharedState) -> gtk::Box {
                 classrooms_flowbox.insert(&card_grid, -1);
             }
         }
-    };
+    });
 
     populate();
 
@@ -222,6 +235,7 @@ pub fn classrooms_section(state: &SharedState) -> gtk::Box {
     if let Ok(monitor) =
         devices_file.monitor_file(gtk::gio::FileMonitorFlags::NONE, gtk::gio::Cancellable::NONE)
     {
+        let populate_m = populate.clone();
         monitor.connect_changed(move |_, _, _, event| {
             if matches!(
                 event,
@@ -229,7 +243,7 @@ pub fn classrooms_section(state: &SharedState) -> gtk::Box {
                     | gtk::gio::FileMonitorEvent::Created
                     | gtk::gio::FileMonitorEvent::Deleted
             ) {
-                populate();
+                populate_m();
             }
         });
         // ponytail: section is built once for the app's lifetime, so keep the monitor alive forever
@@ -266,5 +280,7 @@ pub fn classrooms_section(state: &SharedState) -> gtk::Box {
     });
 
     crate::mqtt::init(sender);
-    container
+
+    let relayout: Rc<dyn Fn()> = populate.clone();
+    (container, relayout)
 }
