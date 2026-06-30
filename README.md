@@ -55,7 +55,19 @@ App Flutter con Material Design. Misma información en un grid responsive con ta
 | Desktop | Rust, GTK4, Libadwaita |
 | Móvil | Flutter / Dart |
 
-## Requisitos
+## Instalación
+Última versión estable
+```sh
+curl -sSL https://raw.githubusercontent.com/xderrisk/umbral-unesum/main/install.sh | bash
+```
+Prerelease (alpha/beta)
+```sh
+curl -sSL https://raw.githubusercontent.com/xderrisk/umbral-unesum/main/install.sh | bash -s -- --prerelease
+```
+
+Requiere `curl`, `jq` y `tar`.
+
+## Requisitos (desarrollo)
 
 - Rust toolchain (para desktop)
 - Flutter SDK (para Android)
