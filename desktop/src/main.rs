@@ -8,6 +8,8 @@ mod state;
 use adw::prelude::*;
 use gettextrs::{bindtextdomain, setlocale, textdomain};
 use gtk::{gdk, gio, glib};
+use std::cell::Cell;
+use std::ops::ControlFlow;
 
 fn main() {
     gio::resources_register_include!("resources.gresource")
@@ -31,13 +33,32 @@ fn main() {
     .expect("Failed to bind the translation domain");
     textdomain("umbral").expect("Failed to set the text domain");
 
-    let fullscreen = std::env::args().any(|a| a == "--fullscreen" || a == "-f");
+    let fullscreen = std::rc::Rc::new(Cell::new(false));
 
     let app = adw::Application::builder()
         .application_id("edu.unesum.umbral")
         .build();
 
-    app.connect_activate(move |app| build_ui(app, fullscreen));
+    app.add_main_option(
+        "fullscreen",
+        glib::Char::from(b'f' as u8),
+        glib::OptionFlags::NONE,
+        glib::OptionArg::None,
+        "Start in fullscreen mode",
+        None,
+    );
+
+    let fullscreen_clone = fullscreen.clone();
+    app.connect_handle_local_options(
+        move |_app: &adw::Application, dict: &glib::VariantDict| -> ControlFlow<glib::ExitCode> {
+            if dict.contains("fullscreen") {
+                fullscreen_clone.set(true);
+            }
+            ControlFlow::Continue(())
+        },
+    );
+
+    app.connect_activate(move |app| build_ui(app, fullscreen.get()));
     app.run();
 }
 
