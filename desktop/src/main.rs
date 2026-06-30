@@ -14,7 +14,13 @@ fn main() {
         .expect("Failed to load embedded resources");
 
     setlocale(gettextrs::LocaleCategory::LcAll, "");
-    bindtextdomain("umbral", "locale").expect("Failed to bind the translation domain");
+    let mut locale_dir = std::env::current_exe().unwrap();
+    locale_dir.set_file_name("locale");
+    bindtextdomain(
+        "umbral",
+        locale_dir.to_str().expect("Invalid locale path"),
+    )
+    .expect("Failed to bind the translation domain");
     textdomain("umbral").expect("Failed to set the text domain");
 
     let app = adw::Application::builder()
