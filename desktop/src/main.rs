@@ -14,11 +14,19 @@ fn main() {
         .expect("Failed to load embedded resources");
 
     setlocale(gettextrs::LocaleCategory::LcAll, "");
-    let mut locale_dir = std::env::current_exe().unwrap();
-    locale_dir.set_file_name("locale");
+    let locale_dir = std::env::current_exe()
+        .unwrap()
+        .parent()
+        .unwrap()
+        .join("locale");
+    let locale_path = if locale_dir.exists() {
+        locale_dir
+    } else {
+        std::path::PathBuf::from("locale")
+    };
     bindtextdomain(
         "umbral",
-        locale_dir.to_str().expect("Invalid locale path"),
+        locale_path.to_str().expect("Invalid locale path"),
     )
     .expect("Failed to bind the translation domain");
     textdomain("umbral").expect("Failed to set the text domain");
