@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/edu/unesum/umbral">
+    <file>ui/classroom_card.ui</file>
+    <file>ui/settings_dialog.ui</file>
+    <file>ui/about_dialog.ui</file>
+    <file>ui/add_classroom_dialog.ui</file>
+    <file>ui/main_window.ui</file>
+    <file>ui/classrooms_section.ui</file>
+    <file>ui/news_section.ui</file>
+  </gresource>
+</gresources>

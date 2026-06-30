@@ -1,7 +1,7 @@
 android/lib/firebase_options.dart
 android/android/app/google-services.json
 android/lib/l10n/app_localizations*.dart
-desktop/data
+desktop/data/ui
 desktop/locale
 desktop/target
 espcam/secret.h

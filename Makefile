@@ -9,7 +9,8 @@ package:
 	mkdir -p dist
 	tar -czf dist/umbral-arm64.tar.gz \
 		-C $$(pwd)/desktop/target/aarch64-unknown-linux-gnu/release umbral \
-		-C $$(pwd)/desktop locale
+		-C $$(pwd)/desktop locale \
+		-C $$(pwd)/desktop/data umbral.desktop umbral.png
 
 compile:
 	cd espcam && arduino-cli compile $(FQBN) $(BUILD) .
