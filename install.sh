@@ -27,7 +27,7 @@ rm -f "$TAR"
 
 DESKTOP="${DIR}/umbral.desktop"
 if [ -f "$DESKTOP" ]; then
-    sed -i "s|^Exec=.*|Exec=${DIR}/umbral|; s|^Icon=.*|Icon=${DIR}/umbral.png|" "$DESKTOP"
+    sed -i "s|^Exec=.*|Exec=${DIR}/umbral --fullscreen|; s|^Icon=.*|Icon=${DIR}/umbral.png|" "$DESKTOP"
     mkdir -p "${HOME}/.local/share/applications" "${HOME}/.config/autostart"
     cp "$DESKTOP" "${HOME}/.local/share/applications/"
     cp "$DESKTOP" "${HOME}/.config/autostart/"

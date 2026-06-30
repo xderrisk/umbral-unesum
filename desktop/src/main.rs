@@ -31,15 +31,17 @@ fn main() {
     .expect("Failed to bind the translation domain");
     textdomain("umbral").expect("Failed to set the text domain");
 
+    let fullscreen = std::env::args().any(|a| a == "--fullscreen" || a == "-f");
+
     let app = adw::Application::builder()
         .application_id("edu.unesum.umbral")
         .build();
 
-    app.connect_activate(build_ui);
+    app.connect_activate(move |app| build_ui(app, fullscreen));
     app.run();
 }
 
-fn build_ui(app: &adw::Application) {
+fn build_ui(app: &adw::Application, fullscreen: bool) {
     let state = state::AppState::new();
     let builder = gtk::Builder::from_resource("/edu/unesum/umbral/ui/main_window.ui");
 
@@ -123,4 +125,8 @@ fn build_ui(app: &adw::Application) {
     ));
 
     window.present();
+
+    if fullscreen {
+        window.fullscreen();
+    }
 }
