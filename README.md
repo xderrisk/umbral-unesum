@@ -96,7 +96,6 @@ Cada ESP32-CAM necesita un archivo `espcam/secret.h` con:
 #define SECRET_PASS "tu_contraseña"
 #define FIREBASE_API_KEY "..."
 #define FIREBASE_URL "https://tu-proyecto.firebaseio.com"
-#define SECRET_MQTT_BROKER "ip_del_broker"
 ```
 
-La cámara se registra automáticamente en Firebase con su dirección MAC como identificador. Desde la app de escritorio se añade el aula usando el botón **+** e ingresando el nombre y la MAC del sensor.
+El broker MQTT se descubre automáticamente via mDNS. La cámara se registra en Firebase con su MAC como identificador. Desde la app de escritorio se añade el aula usando el botón **+** e ingresando el nombre y la MAC del sensor.

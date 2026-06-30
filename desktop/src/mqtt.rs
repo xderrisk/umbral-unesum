@@ -1,5 +1,6 @@
 use async_channel;
 use gettextrs::gettext;
+use mdns_sd::{ServiceDaemon, ServiceInfo};
 use rumqttd::{Broker, Config, Notification};
 use serde_json::Value;
 use std::thread;
@@ -27,6 +28,33 @@ pub fn init(sender: async_channel::Sender<ClassroomUpdate>) {
     });
 
     link_tx.subscribe("unesum/classrooms").unwrap();
+
+    let local_ip = std::net::UdpSocket::bind("0.0.0.0:0")
+        .and_then(|s| s.connect("8.8.8.8:80").and_then(|_| s.local_addr()))
+        .map(|a| a.ip().to_string())
+        .unwrap_or_else(|_| "0.0.0.0".into());
+
+    if let Ok(mdns) = ServiceDaemon::new() {
+        let hostname = gethostname::gethostname()
+            .to_string_lossy()
+            .to_string();
+        match ServiceInfo::new(
+            "_umbral-mqtt._tcp.local.",
+            "umbral-broker",
+            &format!("{}.local.", hostname),
+            &local_ip,
+            1883,
+            None,
+        ) {
+            Ok(service) => {
+                if let Err(e) = mdns.register(service) {
+                    eprintln!("mDNS register error: {}", e);
+                }
+            }
+            Err(e) => eprintln!("mDNS ServiceInfo error: {}", e),
+        }
+    }
+
     thread::spawn(move || {
         loop {
             match link_rx.recv() {

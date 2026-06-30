@@ -6,6 +6,7 @@
 #include "secret.h"
 #include <ArduinoJson.h>
 #include <FirebaseClient.h>
+#include <ESPmDNS.h>
 #include <PubSubClient.h>
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
@@ -295,8 +296,22 @@ void setup() {
   Serial.print("MAC: ");
   Serial.println(macAddress);
 
-  // Inicializar MQTT
-  mqttClient.setServer(SECRET_MQTT_BROKER, 1883);
+  // Inicializar MQTT con descubrimiento mDNS
+  MDNS.begin("umbral-cam");
+  int svc = 0;
+  for (int i = 0; i < 3 && svc == 0; i++) {
+    svc = MDNS.queryService("umbral-mqtt", "tcp");
+    if (svc == 0 && i < 2) delay(2000);
+  }
+  if (svc > 0) {
+    mqttClient.setServer(MDNS.address(0), MDNS.port(0));
+    Serial.print("MQTT broker discovered via mDNS: ");
+    Serial.print(MDNS.address(0));
+    Serial.print(":");
+    Serial.println(MDNS.port(0));
+  } else {
+    Serial.println("No MQTT broker found via mDNS");
+  }
 
   // Inicializar Firebase (esto es lo importante)
   initFirebase();
