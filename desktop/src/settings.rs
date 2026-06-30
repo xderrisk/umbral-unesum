@@ -8,6 +8,8 @@ use std::path::PathBuf;
 pub struct Settings {
     pub api_key: String,
     pub news: bool,
+    pub unique_image: bool,
+    pub unique_image_path: String,
 }
 
 pub fn load() -> Settings {
@@ -23,6 +25,8 @@ pub fn load() -> Settings {
     load_process().unwrap_or(Settings {
         api_key: String::new(),
         news: false,
+        unique_image: false,
+        unique_image_path: String::new(),
     })
 }
 

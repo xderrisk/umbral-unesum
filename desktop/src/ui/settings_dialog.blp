@@ -10,6 +10,31 @@ Adw.PreferencesDialog settings_dialog {
         title: _("Show News");
       }
 
+      Adw.SwitchRow switch_unique_image {
+        title: _("Show Unique Image");
+      }
+
+      Adw.ActionRow ui_action_row {
+        title: _("Unique Image File");
+
+        [suffix]
+        Box {
+          orientation: horizontal;
+          spacing: 6;
+
+          Button btn_ui_browse {
+            label: _("Browse...");
+            valign: center;
+          }
+
+          Button btn_ui_clear {
+            icon-name: "edit-clear-symbolic";
+            tooltip-text: _("Remove image");
+            valign: center;
+          }
+        }
+      }
+
       Adw.PasswordEntryRow entry_api_key {
         title: _("Firebase API Key");
       }

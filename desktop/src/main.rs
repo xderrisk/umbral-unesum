@@ -10,6 +10,7 @@ use gettextrs::{bindtextdomain, setlocale, textdomain};
 use gtk::{gdk, gio, glib};
 use std::cell::Cell;
 use std::ops::ControlFlow;
+use std::rc::Rc;
 
 fn main() {
     gio::resources_register_include!("resources.gresource")
@@ -85,13 +86,47 @@ fn build_ui(app: &adw::Application, fullscreen: bool) {
     let left_container: gtk::Box = builder.object("left_container").unwrap();
     let right_container: gtk::Box = builder.object("right_container").unwrap();
 
-    left_container.append(&news::news_section());
+    let news_widget = news::news_section();
+    left_container.append(&news_widget);
+
+    let media_unique = gtk::Builder::from_resource("/edu/unesum/umbral/ui/media_section.ui");
+    let unique_image_widget: gtk::Picture = media_unique
+        .object("media_picture")
+        .expect("media_picture not found");
+    if !state.borrow().settings.unique_image_path.is_empty() {
+        unique_image_widget.set_filename(Some(
+            &state.borrow().settings.unique_image_path,
+        ));
+    }
+    left_container.append(&unique_image_widget);
+
     let (classrooms_section_box, classrooms_relayout) = classrooms::classrooms_section(&state);
     right_container.append(&classrooms_section_box);
 
-    let is_news_enabled = state.borrow().settings.news;
-    left_container.set_visible(is_news_enabled);
-    separator.set_visible(is_news_enabled);
+    let apply_visibility: Rc<dyn Fn()> = {
+        let state = state.clone();
+        let news_widget = news_widget.clone();
+        let unique_image_widget = unique_image_widget.clone();
+        let left_container = left_container.clone();
+        let separator = separator.clone();
+        Rc::new(move || {
+            let s = state.borrow();
+            let show_news = s.settings.news;
+            let show_image = s.settings.unique_image;
+            let path = s.settings.unique_image_path.clone();
+            drop(s);
+            news_widget.set_visible(show_news);
+            unique_image_widget.set_filename(if path.is_empty() {
+                None
+            } else {
+                Some(&path)
+            });
+            unique_image_widget.set_visible(show_image);
+            left_container.set_visible(show_news || show_image);
+            separator.set_visible(show_news || show_image);
+        })
+    };
+    apply_visibility();
 
     let btn_add: gtk::Button = builder.object("btn_add").unwrap();
     btn_add.connect_clicked(glib::clone!(
@@ -121,19 +156,16 @@ fn build_ui(app: &adw::Application, fullscreen: bool) {
         window,
         #[strong]
         state,
-        #[weak]
-        left_container,
-        #[weak]
-        separator,
         #[strong]
         classrooms_relayout,
+        #[strong]
+        apply_visibility,
         move |_| {
             dialogs::show_config(
                 &window,
                 &state,
-                left_container.clone(),
-                separator.clone(),
                 classrooms_relayout.clone(),
+                apply_visibility.clone(),
             );
         }
     ));
