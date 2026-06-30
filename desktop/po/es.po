@@ -45,47 +45,43 @@ msgid "Authentication successful, but database rules rejected the write operatio
 msgstr "La autenticación fue exitosa, pero las reglas de la base de datos rechazaron la operación de escritura"
 
 msgid "Missing required parameters for deletion."
-msgstr ""
+msgstr "Faltan parámetros necesarios para su eliminación."
 
-#, fuzzy
 msgid "Connection error during database deletion"
-msgstr "Error de conexión durante la escritura de la base de datos"
+msgstr "Error de conexión durante la eliminación de la base de datos"
 
 msgid "Failed to delete database record"
-msgstr ""
+msgstr "No se pudo eliminar el registro de la base de datos"
 
-#, fuzzy
 msgid "Connection error during account deletion"
-msgstr "Error de conexión durante la escritura de la base de datos"
+msgstr "Error de conexión durante la eliminación de la cuenta"
 
 msgid "Error deleting Firebase account"
-msgstr ""
+msgstr "Error al eliminar la cuenta de Firebase"
 
 msgid "Missing required parameters for update."
-msgstr ""
+msgstr "Faltan parámetros requeridos para la actualización."
 
-#, fuzzy
 msgid "Connection error during database update"
-msgstr "Error de conexión durante la escritura de la base de datos"
+msgstr "Error de conexión durante la actualización de la base de datos"
 
 msgid "Failed to update database record"
-msgstr ""
+msgstr "No se pudo actualizar el registro de la base de datos"
 
-#, fuzzy
 msgid "Firebase API Key is not configured."
-msgstr "La API Key de Firebase no está configurada en la configuración de la aplicación."
+msgstr "La clave API de Firebase no está configurada."
 
-#, fuzzy
 msgid "Connection error during camera login"
-msgstr "Error de conexión durante la autenticación"
+msgstr "Error de conexión durante el inicio de sesión de la cámara"
 
-#, fuzzy
 msgid "Failed to parse credentials from login response."
-msgstr "No se pudieron obtener las credenciales de Firebase Auth"
+msgstr "No se pudieron analizar las credenciales de la respuesta de inicio de sesión."
 
-#, fuzzy
 msgid "Authentication failed for camera deletion"
-msgstr "Error de autenticación"
+msgstr "Error de autenticación para eliminar la cámara"
+
+msgid "News"
+msgstr "Noticias"
 
 msgid "No news images available"
 msgstr "No hay imágenes de noticias disponibles"
@@ -111,22 +107,32 @@ msgstr "Ocupado"
 msgid "Offline"
 msgstr "Desconectado"
 
-#, fuzzy
 msgid "Edit classroom name"
-msgstr "Nombre de aula"
+msgstr "Editar nombre del aula"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 msgid "Settings"
 msgstr "Ajustes"
 
-#, fuzzy
 msgid "Show News"
-msgstr "Noticias"
+msgstr "Mostrar noticias"
+
+msgid "Show Unique Image"
+msgstr "Mostrar imagen única"
+
+msgid "Unique Image File"
+msgstr "Archivo de imagen único"
+
+msgid "Browse..."
+msgstr "Navegar..."
+
+msgid "Remove image"
+msgstr "Quitar imagen"
 
 msgid "Firebase API Key"
 msgstr "API key de Firebase"
@@ -155,9 +161,6 @@ msgstr "Estado del aula"
 msgid "No Classrooms Added"
 msgstr "No se agregaron aulas"
 
-msgid "News"
-msgstr "Noticias"
-
 msgid "Add classroom"
 msgstr "Agregar aula"
 
@@ -165,7 +168,7 @@ msgid "About us"
 msgstr "Sobre Umbral"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Pantalla completa"
 
 #, fuzzy
 #~ msgid "New Name"

@@ -67,6 +67,9 @@ msgstr ""
 msgid "Authentication failed for camera deletion"
 msgstr ""
 
+msgid "News"
+msgstr ""
+
 msgid "No news images available"
 msgstr ""
 
@@ -106,6 +109,18 @@ msgstr ""
 msgid "Show News"
 msgstr ""
 
+msgid "Show Unique Image"
+msgstr ""
+
+msgid "Unique Image File"
+msgstr ""
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Remove image"
+msgstr ""
+
 msgid "Firebase API Key"
 msgstr ""
 
@@ -131,9 +146,6 @@ msgid "Classroom Status"
 msgstr ""
 
 msgid "No Classrooms Added"
-msgstr ""
-
-msgid "News"
 msgstr ""
 
 msgid "Add classroom"
