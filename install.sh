@@ -25,12 +25,17 @@ mkdir -p "$DIR"
 tar -xzf "$TAR" -C "$DIR"
 rm -f "$TAR"
 
-DESKTOP="${DIR}/umbral.desktop"
-if [ -f "$DESKTOP" ]; then
-    sed -i "s|^Exec=.*|Exec=${DIR}/umbral --fullscreen|; s|^Icon=.*|Icon=${DIR}/umbral.png|" "$DESKTOP"
-    mkdir -p "${HOME}/.local/share/applications" "${HOME}/.config/autostart"
-    cp "$DESKTOP" "${HOME}/.local/share/applications/"
-    cp "$DESKTOP" "${HOME}/.config/autostart/"
+DESKTOP_FILE="${DIR}/umbral.desktop"
+DESKTOP_DIR=$(xdg-user-dir DESKTOP 2>/dev/null || echo "${HOME}/Desktop")
+AUTOSTART_DIR="${HOME}/.config/autostart"
+APPLICATION_DIR="${HOME}/.local/share/applications"
+if [ -f "$DESKTOP_FILE" ]; then
+    sed -i "s|^Exec=.*|Exec=${DIR}/umbral --fullscreen|" "$DESKTOP_FILE"
+    sed -i "s|^Icon=.*|Icon=${DIR}/umbral.png|" "$DESKTOP_FILE"
+    mkdir -p "$APPLICATION_DIR" "$AUTOSTART_DIR" "$DESKTOP_DIR"
+    cp "$DESKTOP_FILE" "$APPLICATION_DIR"
+    cp "$DESKTOP_FILE" "$AUTOSTART_DIR/"
+    cp "$DESKTOP_FILE" "$DESKTOP_DIR/"
 fi
 
 echo "Umbral instalado en ${DIR}."
