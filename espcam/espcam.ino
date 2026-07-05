@@ -6,7 +6,6 @@
 #include "secret.h"
 #include <ArduinoJson.h>
 #include <FirebaseClient.h>
-#include <ESPmDNS.h>
 #include <PubSubClient.h>
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
@@ -40,7 +39,6 @@ String previousState = "";
 unsigned long lastAnalysis = 0;
 unsigned long lastHeartbeat = 0;
 unsigned long lastMQTTAttempt = 0;
-unsigned long lastMDNSDiscovery = 0;
 
 static uint8_t *prevFrame = NULL;
 static size_t prevLen = 0;
@@ -60,28 +58,14 @@ String firebaseUid = "";
 bool firebaseReady = false;
 
 // ========== MQTT ==========
-void discoverMQTT() {
-  int svc = MDNS.queryService("umbral-mqtt", "tcp");
-  if (svc > 0) {
-    mqttClient.setServer(MDNS.address(0), MDNS.port(0));
-    Serial.print("MQTT broker re-discovered via mDNS: ");
-    Serial.print(MDNS.address(0));
-    Serial.print(":");
-    Serial.println(MDNS.port(0));
-  }
-}
-
 void reconnectMQTT() {
   unsigned long now = millis();
+  // Intentar reconectar cada 10 segundos máximo
   if (now - lastMQTTAttempt < 10000)
     return;
   lastMQTTAttempt = now;
 
   if (!mqttClient.connected()) {
-    if (now - lastMDNSDiscovery > 60000) {
-      discoverMQTT();
-      lastMDNSDiscovery = now;
-    }
     Serial.print("MQTT connecting...");
     if (mqttClient.connect(macAddress.c_str())) {
       Serial.println("OK");
@@ -311,23 +295,8 @@ void setup() {
   Serial.print("MAC: ");
   Serial.println(macAddress);
 
-  // Inicializar MQTT con descubrimiento mDNS
-  MDNS.begin("umbral-cam");
-  lastMDNSDiscovery = millis();
-  int svc = 0;
-  for (int i = 0; i < 3 && svc == 0; i++) {
-    svc = MDNS.queryService("umbral-mqtt", "tcp");
-    if (svc == 0 && i < 2) delay(2000);
-  }
-  if (svc > 0) {
-    mqttClient.setServer(MDNS.address(0), MDNS.port(0));
-    Serial.print("MQTT broker discovered via mDNS: ");
-    Serial.print(MDNS.address(0));
-    Serial.print(":");
-    Serial.println(MDNS.port(0));
-  } else {
-    Serial.println("No MQTT broker found via mDNS");
-  }
+  // Inicializar MQTT
+  mqttClient.setServer(SECRET_MQTT_BROKER, 1883);
 
   // Inicializar Firebase (esto es lo importante)
   initFirebase();
