@@ -7,6 +7,7 @@ use gtk::glib;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
+use std::time::Instant;
 
 pub fn classrooms_section(state: &SharedState) -> (gtk::Box, Rc<dyn Fn()>) {
     let api_key = state.borrow().settings.api_key.clone();
@@ -20,6 +21,7 @@ pub fn classrooms_section(state: &SharedState) -> (gtk::Box, Rc<dyn Fn()>) {
         Rc::new(RefCell::new(HashMap::new()));
     // ponytail: keeps last live status so a rebuild doesn't flash every card to Offline
     let status_cache: Rc<RefCell<HashMap<String, String>>> = Rc::new(RefCell::new(HashMap::new()));
+    let last_seen: Rc<RefCell<HashMap<String, Instant>>> = Rc::new(RefCell::new(HashMap::new()));
     let (sender, receiver) = async_channel::unbounded::<crate::mqtt::ClassroomUpdate>();
 
     let populate = Rc::new({
@@ -250,13 +252,17 @@ pub fn classrooms_section(state: &SharedState) -> (gtk::Box, Rc<dyn Fn()>) {
         std::mem::forget(monitor);
     }
 
+    let labels_map_cl = labels_map.clone();
+    let status_cache_cl = status_cache.clone();
+    let last_seen_cl = last_seen.clone();
     let main_context = glib::MainContext::default();
     main_context.spawn_local(async move {
         while let Ok(update) = receiver.recv().await {
-            status_cache
+            last_seen_cl.borrow_mut().insert(update.mac.clone(), Instant::now());
+            status_cache_cl
                 .borrow_mut()
                 .insert(update.mac.clone(), update.status.clone());
-            if let Some((label, card)) = labels_map.borrow().get(&update.mac) {
+            if let Some((label, card)) = labels_map_cl.borrow().get(&update.mac) {
                 let status_text = match update.status.as_str() {
                     "0" => {
                         card.add_css_class("classroom-available");
@@ -276,6 +282,27 @@ pub fn classrooms_section(state: &SharedState) -> (gtk::Box, Rc<dyn Fn()>) {
                 };
                 label.set_label(&status_text);
             }
+        }
+    });
+
+    // ponytail: periodic check — mark offline if no MQTT update for 90s (1.5x ESP32 heartbeat)
+    glib::timeout_add_local(std::time::Duration::from_secs(10), {
+        let labels_map = labels_map.clone();
+        let last_seen = last_seen.clone();
+        let status_cache = status_cache.clone();
+        move || {
+            let now = Instant::now();
+            let seen = last_seen.borrow_mut();
+            for (mac, (label, card)) in labels_map.borrow().iter() {
+                let elapsed = seen.get(mac).map(|t| now.duration_since(*t).as_secs()).unwrap_or(u64::MAX);
+                if elapsed > 90 {
+                    status_cache.borrow_mut().insert(mac.clone(), "offline".to_string());
+                    card.remove_css_class("classroom-available");
+                    card.remove_css_class("classroom-occupied");
+                    label.set_label(&gettext("Offline"));
+                }
+            }
+            glib::ControlFlow::Continue
         }
     });
 

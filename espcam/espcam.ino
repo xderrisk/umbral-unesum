@@ -43,6 +43,7 @@ String previousState = "0";
 String currentState = "0";
 unsigned long lastAnalysis = 0;
 unsigned long lastHeartbeat = 0;
+unsigned long lastMQTTHB = 0;
 unsigned long lastMQTTAttempt = 0;
 unsigned long lastMotionTime = 0;
 unsigned long lastFrameCapture = 0;
@@ -302,31 +303,45 @@ void publishMQTT() {
   if (newState == "ERR")
     return;
 
-  // Solo publicar si hay cambio de estado
+  bool shouldPublish = false;
+
   if (newState != currentState) {
     currentState = newState;
     stateChanged = true;
+    shouldPublish = true;
+  }
 
-    JsonDocument doc;
-    doc["mac"] = macAddress;
-    doc["status"] = currentState;
-    String payload;
-    serializeJson(doc, payload);
+  // ponytail: heartbeat MQTT cada 60s para que el escritorio detecte desconexión
+  if (now - lastMQTTHB >= HEARTBEAT_INTERVAL) {
+    shouldPublish = true;
+    lastMQTTHB = now;
+  }
 
-    Serial.print("State changed: ");
-    Serial.println(payload);
+  if (!shouldPublish)
+    return;
 
-    // Intentar MQTT
-    if (mqttClient.connected()) {
-      if (mqttClient.publish("unesum/classrooms", payload.c_str())) {
-        Serial.println("MQTT sent");
-      } else {
-        Serial.println("MQTT send failed");
-      }
+  JsonDocument doc;
+  doc["mac"] = macAddress;
+  doc["status"] = currentState;
+  String payload;
+  serializeJson(doc, payload);
+
+  Serial.print("Publishing: ");
+  Serial.println(payload);
+
+  // Intentar MQTT
+  if (mqttClient.connected()) {
+    if (mqttClient.publish("unesum/classrooms", payload.c_str())) {
+      Serial.println("MQTT sent");
+    } else {
+      Serial.println("MQTT send failed");
     }
+  }
 
-    // Actualizar Firebase siempre
+  // Actualizar Firebase siempre
+  if (stateChanged) {
     updateFirebaseState(currentState);
+    stateChanged = false;
   }
 }
 
