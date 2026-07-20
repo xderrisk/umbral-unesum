@@ -35,7 +35,7 @@
 #define HEARTBEAT_INTERVAL 30000
 
 // ========== CONFIGURACIÓN DE OCUPACIÓN ==========
-#define OCCUPIED_TIMEOUT 60000 // 30 segundos para marcar como desocupada
+#define OCCUPIED_TIMEOUT 60000 // 60 segundos para marcar como desocupada
 #define MOTION_COOLDOWN 2000   // Cooldown entre detecciones de movimiento
 
 // ========== VARIABLES GLOBALES ==========
@@ -113,6 +113,7 @@ void reconnectMQTT() {
   Serial.print("Intentando conexión MQTT...");
   if (mqttClient.connect(macAddress.c_str())) {
     Serial.println("CONECTADO");
+    publishState(previousState);
   } else {
     Serial.printf("FALLÓ (rc=%d). Reintento en 15s.\n", mqttClient.state());
   }
@@ -140,6 +141,7 @@ void initFirebaseAsync() {
   Serial.println("Iniciando Autenticación de Firebase (Asíncrona)...");
 
   ssl_client.setInsecure();
+  ssl_client.setTimeout(3);
 
   UserAuth userAuth(FIREBASE_API_KEY, email.c_str(), password.c_str());
 
@@ -184,7 +186,7 @@ void processFirebase() {
       db.url(FIREBASE_URL);
 
       String path = "/cameras/" + firebaseUid;
-      db.set<String>(async_client, path + "/status", "0", processData);
+      db.set<String>(async_client, path + "/status", previousState, processData);
 
       writer.create(timestampJson, ".sv", string_t("timestamp"));
       db.set<object_t>(async_client, path + "/last_connection", timestampJson,
@@ -311,7 +313,7 @@ void updateOccupancy(String motionDetected) {
     if (now - lastOccupiedUpdate >= OCCUPIED_TIMEOUT) {
       previousState = "0";
       publishState("0");
-      Serial.println("❌ Aula DESOCUPADA - 30 segundos sin movimiento");
+      Serial.println("❌ Aula DESOCUPADA - 60 segundos sin movimiento");
     }
   }
 }
